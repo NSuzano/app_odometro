@@ -15,10 +15,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      theme: ThemeData(
-        primarySwatch: kDefaultColors,
-      ),
-      initialRoute: 'login',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: kDefaultColors, fontFamily: 'Montserrat'),
+      initialRoute: '/',
       routes: {
         '/': (context) => Home(),
         'login': (context) => Login(),
