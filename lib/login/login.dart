@@ -16,13 +16,23 @@ class _LoginState extends State<Login> {
       appBar: AppBar(
         title: Text('Login'),
         backgroundColor: kDefaultColors,
+        centerTitle: true,
       ),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(8.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Container(
+                  width: 200, child: Image.asset("assets/icons/icon_wp.png")),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                "Digite seu email e senha",
+                style: TextStyle(fontSize: 16),
+              ),
               TextField(
                 controller: emailController,
                 decoration: InputDecoration(labelText: 'Email'),
