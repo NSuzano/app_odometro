@@ -1,5 +1,10 @@
+import 'package:app_odometro/util/image_cropper_page.dart';
+import 'package:app_odometro/util/image_picker_class.dart';
+import 'package:app_odometro/util/modal_dialog.dart';
+import 'package:app_odometro/util/recognization_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:image_picker/image_picker.dart';
 
 class RaceForm extends StatefulWidget {
   const RaceForm({super.key});
@@ -84,7 +89,37 @@ class _RaceFormState extends State<RaceForm> {
               ),
               SizedBox(height: 20),
               ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    imagePickerModal(context, onCameraTap: () {
+                      pickImage(source: ImageSource.camera).then((value) {
+                        if (value != '') {
+                          imageCroppedView(value, context).then((value) {
+                            if (value != "") {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) =>
+                                          RecognizePage(path: value)));
+                            }
+                          });
+                        }
+                      });
+                    }, onGalleryTap: () {
+                      pickImage(source: ImageSource.gallery).then((value) {
+                        if (value != '') {
+                          imageCroppedView(value, context).then((value) {
+                            if (value != "") {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) =>
+                                          RecognizePage(path: value)));
+                            }
+                          });
+                        }
+                      });
+                    });
+                  },
                   icon: Icon(Icons.photo),
                   label: Text("Enviar Foto")),
               SizedBox(height: 20),
