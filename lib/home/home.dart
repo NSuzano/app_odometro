@@ -1,5 +1,7 @@
+import 'package:app_odometro/race/race_form.dart';
 import 'package:app_odometro/util/card_home.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -40,9 +42,12 @@ class _HomeState extends State<Home> {
                   mainAxisSpacing: 8.0, // Espaçamento vertical entre os cards
                 ),
                 children: [
-                  CardHome(
-                      image: "assets/icons/car.png",
-                      text: "Registro de Corrida"),
+                  GestureDetector(
+                    onTap: () => Get.to(RaceForm()),
+                    child: CardHome(
+                        image: "assets/icons/car.png",
+                        text: "Registro de Corrida"),
+                  ),
                   CardHome(
                       image: "assets/icons/bill.png", text: "Outras Dispesas"),
                 ],
