@@ -1,5 +1,6 @@
 import 'package:app_odometro/constraint/constraint.dart';
 import 'package:app_odometro/login/login.dart';
+import 'package:app_odometro/race/race_form.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,10 +18,11 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: kDefaultColors, fontFamily: 'Montserrat'),
-      initialRoute: '/',
+      initialRoute: 'raceForm',
       routes: {
         '/': (context) => Home(),
         'login': (context) => Login(),
+        'raceForm': (context) => RaceForm(),
       },
     );
   }

@@ -26,10 +26,10 @@ class _LoginState extends State<Login> {
             children: [
               Container(
                   width: 200, child: Image.asset("assets/icons/icon_wp.png")),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
-              Text(
+              const Text(
                 "Digite seu email e senha",
                 style: TextStyle(fontSize: 16),
               ),
@@ -37,7 +37,7 @@ class _LoginState extends State<Login> {
                 controller: emailController,
                 decoration: InputDecoration(labelText: 'Email'),
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               TextField(
                 controller: passwordController,
                 decoration: InputDecoration(labelText: 'Password'),
@@ -60,7 +60,7 @@ class _LoginState extends State<Login> {
                   String password = passwordController.text;
                   // You can add your authentication logic here
                 },
-                child: Text(
+                child: const Text(
                   'Login',
                   style: TextStyle(
                     color: Colors.white, // Text color
