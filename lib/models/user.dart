@@ -1,3 +1,11 @@
+import 'dart:convert';
+import 'dart:ffi';
+import 'dart:typed_data';
+
+import 'package:app_odometro/constraint/constraint.dart';
+import 'package:http/http.dart' as http;
+import 'package:jwt_decoder/jwt_decoder.dart';
+
 class User {
   int? id;
   String? name;
@@ -46,7 +54,30 @@ class User {
     return data;
   }
 
-  static Future<User?> login() async {
+  static Future<User?> login(String email, String password) async {
     User? user;
+    Map jsonPost = {"email": email, "password": password};
+    try {
+      var response = await http.post(Uri.parse(kLogin),
+          headers: {"Accept": "application/json"}, body: jsonPost);
+      // print(response.bodyBytes);
+
+      if (response.statusCode == 200) {
+        Map jsonResponse = jsonDecode(response.body);
+
+        Map<String, dynamic> userInfo =
+            JwtDecoder.decode(jsonResponse['token']);
+
+        user = User.fromJson(userInfo);
+
+        return user;
+      } else {
+        throw Exception('Falha ao fazer o Login');
+      }
+
+      // print(res);
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 }
