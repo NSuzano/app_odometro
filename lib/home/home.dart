@@ -3,6 +3,8 @@ import 'package:app_odometro/util/card_home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../models/user.dart';
+
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -13,11 +15,29 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
+    final data = Get.arguments;
+    User user;
+    user = data['user'];
+
+    print(user.email);
+
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 80, // Set this height
+        elevation: 0,
         centerTitle: true,
-        title: Text("Home"),
-        actions: [Icon(Icons.logout_outlined)],
+        title: Text(user.name!),
+        leading: SizedBox(
+          child: Image.asset(
+            "assets/icons/icon_wp.png",
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Icon(Icons.logout_outlined),
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -43,7 +63,8 @@ class _HomeState extends State<Home> {
                 ),
                 children: [
                   GestureDetector(
-                    onTap: () => Get.to(RaceForm()),
+                    onTap: () =>
+                        Get.toNamed('raceForm', arguments: {"user": user}),
                     child: CardHome(
                         image: "assets/icons/car.png",
                         text: "Registro de Corrida"),

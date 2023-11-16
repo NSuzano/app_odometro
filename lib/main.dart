@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: kDefaultColors, fontFamily: 'Montserrat'),
-      initialRoute: 'raceForm',
+      initialRoute: 'login',
       routes: {
         '/': (context) => Home(),
         'login': (context) => Login(),
