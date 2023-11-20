@@ -6,3 +6,4 @@ const kDefautUrl = "http://10.0.2.2/odometer/public/api";
 
 const kLogin = "$kDefautUrl/login";
 const kRacePost = "$kDefautUrl/races";
+const kRaceGet = "$kDefautUrl/races";

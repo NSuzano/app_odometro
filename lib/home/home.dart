@@ -1,8 +1,10 @@
 import 'package:app_odometro/race/race_form.dart';
+import 'package:app_odometro/race/util_race.dart';
 import 'package:app_odometro/util/card_home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../models/race.dart';
 import '../models/user.dart';
 
 class Home extends StatefulWidget {
@@ -34,8 +36,12 @@ class _HomeState extends State<Home> {
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(Icons.logout_outlined),
+            padding: EdgeInsets.all(8.0),
+            child: GestureDetector(
+                onTap: () {
+                  Get.offAndToNamed('login');
+                },
+                child: Icon(Icons.logout_outlined)),
           )
         ],
       ),
@@ -43,10 +49,10 @@ class _HomeState extends State<Home> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Text(
+            const Text(
               "Registro de Dispesas Working Plus",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
             ),
@@ -63,8 +69,9 @@ class _HomeState extends State<Home> {
                 ),
                 children: [
                   GestureDetector(
-                    onTap: () =>
-                        Get.toNamed('raceForm', arguments: {"user": user}),
+                    onTap: () async {
+                      Get.toNamed('raceForm', arguments: {"user": user});
+                    },
                     child: CardHome(
                         image: "assets/icons/car.png",
                         text: "Registro de Corrida"),

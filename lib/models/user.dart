@@ -60,11 +60,11 @@ class User {
     try {
       var response = await http.post(Uri.parse(kLogin),
           headers: {"Accept": "application/json"}, body: jsonPost);
-      // print(response.bodyBytes);
+      Map jsonResponse = jsonDecode(response.body);
+
+      print(jsonResponse);
 
       if (response.statusCode == 200) {
-        Map jsonResponse = jsonDecode(response.body);
-
         Map<String, dynamic> userInfo =
             JwtDecoder.decode(jsonResponse['token']);
 
@@ -72,12 +72,10 @@ class User {
 
         return user;
       } else {
-        throw Exception('Falha ao fazer o Login');
+        throw jsonResponse['message'];
       }
-
-      // print(res);
     } catch (e) {
-      throw Exception(e);
+      return Future.error(e);
     }
   }
 }
