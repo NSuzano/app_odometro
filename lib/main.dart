@@ -1,10 +1,11 @@
 import 'package:app_odometro/constraint/constraint.dart';
-import 'package:app_odometro/login/login.dart';
-import 'package:app_odometro/race/race_form.dart';
+import 'package:app_odometro/pages/expenses/espenses.dart';
+import 'package:app_odometro/pages/login/login.dart';
+import 'package:app_odometro/pages/race/race_form.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'home/home.dart';
+import 'pages/home/home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => Home(),
         'login': (context) => Login(),
         'raceForm': (context) => RaceForm(),
+        'expensives': (context) => ExpansesPage(),
       },
     );
   }

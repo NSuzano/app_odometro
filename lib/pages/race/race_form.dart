@@ -2,22 +2,22 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:app_odometro/race/util_race.dart';
+import 'package:app_odometro/pages/race/util_race.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import '../constraint/constraint.dart';
-import '../models/race.dart';
-import '../models/user.dart';
-import '../util/geolocator_util.dart';
-import '../util/image_cropper_page.dart';
-import '../util/image_picker_class.dart';
-import '../util/loading_dialog.dart';
-import '../util/modal_dialog.dart';
-import '../util/recognization_page.dart';
-import '../util/snackbar.dart';
+import '../../constraint/constraint.dart';
+import '../../models/race.dart';
+import '../../models/user.dart';
+import '../../util/geolocator_util.dart';
+import '../../util/image_cropper_page.dart';
+import '../../util/image_picker_class.dart';
+import '../../util/loading_dialog.dart';
+import '../../util/modal_dialog.dart';
+import '../../util/recognization_page.dart';
+import '../../util/snackbar.dart';
 
 class RaceForm extends StatefulWidget {
   const RaceForm({Key? key}) : super(key: key);
@@ -203,20 +203,17 @@ class _RaceFormState extends State<RaceForm> {
           _capturedImage != null
               ? Container(
                   height: 120,
-                  width: 93,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: kDefaultColors,
-                      width: 5,
-                    ),
-                  ),
+                  width: 120,
                   child: Image.file(
                     _capturedImage!,
                     width: 150,
                     alignment: Alignment.center,
                   ),
                 )
-              : Text(""),
+              : Text(
+                  "Tire uma foto da nota",
+                  style: TextStyle(color: Colors.redAccent),
+                ),
         ],
       ),
     );

@@ -1,11 +1,11 @@
 import 'package:app_odometro/constraint/constraint.dart';
-import 'package:app_odometro/home/home.dart';
+import 'package:app_odometro/pages/home/home.dart';
 import 'package:app_odometro/util/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../models/user.dart';
-import '../util/loading_dialog.dart';
+import '../../models/user.dart';
+import '../../util/loading_dialog.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -37,14 +37,19 @@ class _LoginState extends State<Login> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                      width: 200,
-                      child: Image.asset("assets/icons/icon_wp.png")),
+                      width: 150,
+                      child: Image.asset(
+                        "assets/icons/icon_wp.png",
+                      )),
                   const SizedBox(
                     height: 20,
                   ),
                   const Text(
                     "Digite seu email e senha",
                     style: TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(
+                    height: 20,
                   ),
                   TextFormField(
                     validator: (value) {
@@ -54,7 +59,18 @@ class _LoginState extends State<Login> {
                       return null;
                     },
                     controller: emailController,
-                    decoration: InputDecoration(labelText: 'Email'),
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.email),
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                      labelText: "Email",
+                      labelStyle: const TextStyle(color: Colors.grey),
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 20.0),
                   TextFormField(
@@ -65,7 +81,18 @@ class _LoginState extends State<Login> {
                       return null;
                     },
                     controller: passwordController,
-                    decoration: InputDecoration(labelText: 'Password'),
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.password),
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                      labelText: "Senha",
+                      labelStyle: const TextStyle(color: Colors.grey),
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
                     obscureText: true,
                   ),
                   SizedBox(height: 20.0),

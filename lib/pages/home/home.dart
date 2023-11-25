@@ -1,11 +1,11 @@
-import 'package:app_odometro/race/race_form.dart';
-import 'package:app_odometro/race/util_race.dart';
+import 'package:app_odometro/pages/race/race_form.dart';
+import 'package:app_odometro/pages/race/util_race.dart';
 import 'package:app_odometro/util/card_home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../models/race.dart';
-import '../models/user.dart';
+import '../../models/race.dart';
+import '../../models/user.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -56,7 +56,7 @@ class _HomeState extends State<Home> {
               "Registro de Dispesas Working Plus",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Expanded(
@@ -70,14 +70,23 @@ class _HomeState extends State<Home> {
                 children: [
                   GestureDetector(
                     onTap: () async {
+                      print("TESTE");
+
                       Get.toNamed('raceForm', arguments: {"user": user});
                     },
-                    child: CardHome(
+                    child: const CardHome(
                         image: "assets/icons/car.png",
                         text: "Registro de Corrida"),
                   ),
-                  CardHome(
-                      image: "assets/icons/bill.png", text: "Outras Dispesas"),
+                  GestureDetector(
+                    onTap: () async {
+                      print("TESTE");
+                      Get.toNamed('expensives', arguments: {"user": user});
+                    },
+                    child: const CardHome(
+                        image: "assets/icons/bill.png",
+                        text: "Outras Dispesas"),
+                  ),
                 ],
               ),
             ),
