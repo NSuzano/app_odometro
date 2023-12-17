@@ -23,8 +23,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => Home(),
         'login': (context) => Login(),
-        'raceForm': (context) => RaceForm(),
         'expensives': (context) => ExpansesPage(),
+        'race': (context) => RaceForm(),
       },
     );
   }

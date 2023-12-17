@@ -21,20 +21,14 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        child: Center(
+      body: Container(
+        alignment: Alignment.center,
+        child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Form(
               key: _formKey,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
                       width: 150,
@@ -46,7 +40,10 @@ class _LoginState extends State<Login> {
                   ),
                   const Text(
                     "Digite seu email e senha",
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: kDefaultColors,
+                        fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(
                     height: 20,

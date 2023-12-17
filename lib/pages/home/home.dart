@@ -29,9 +29,12 @@ class _HomeState extends State<Home> {
         elevation: 0,
         centerTitle: true,
         title: Text(user.name!),
-        leading: SizedBox(
-          child: Image.asset(
-            "assets/icons/icon_wp.png",
+        leading: Padding(
+          padding: const EdgeInsets.all(7.0),
+          child: SizedBox(
+            child: Image.asset(
+              "assets/icons/icon_wp.png",
+            ),
           ),
         ),
         actions: [
@@ -41,7 +44,10 @@ class _HomeState extends State<Home> {
                 onTap: () {
                   Get.offAndToNamed('login');
                 },
-                child: Icon(Icons.logout_outlined)),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(Icons.logout_outlined),
+                )),
           )
         ],
       ),
@@ -51,10 +57,6 @@ class _HomeState extends State<Home> {
           children: [
             const SizedBox(
               height: 10,
-            ),
-            const Text(
-              "Registro de Dispesas Working Plus",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
             ),
             const SizedBox(
               height: 20,
@@ -70,21 +72,23 @@ class _HomeState extends State<Home> {
                 children: [
                   GestureDetector(
                     onTap: () async {
-                      print("TESTE");
+                      List<Race> races = await RaceUtils.getRaces(user);
 
-                      Get.toNamed('raceForm', arguments: {"user": user});
+                      Get.toNamed('race',
+                          arguments: {"user": user, "races": races});
                     },
                     child: const CardHome(
-                        image: "assets/icons/car.png",
+                        image: "assets/icons/odometro.png",
                         text: "Registro de Corrida"),
                   ),
                   GestureDetector(
                     onTap: () async {
                       print("TESTE");
+
                       Get.toNamed('expensives', arguments: {"user": user});
                     },
                     child: const CardHome(
-                        image: "assets/icons/bill.png",
+                        image: "assets/icons/honorarios.png",
                         text: "Outras Dispesas"),
                   ),
                 ],

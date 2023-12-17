@@ -40,13 +40,21 @@ class _ExpansesPageState extends State<ExpansesPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Outras Dispesas"),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text(
+          "Outras Dispesas",
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
             Get.toNamed('/', arguments: {"user": user});
           },
-          child: Icon(Icons.arrow_back_rounded),
+          child: Icon(
+            Icons.arrow_back_rounded,
+            color: Colors.black,
+          ),
         ),
       ),
       body: Padding(

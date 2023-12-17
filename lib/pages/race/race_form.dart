@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:app_odometro/pages/race/race_card.dart';
 import 'package:app_odometro/pages/race/util_race.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -31,36 +32,35 @@ class _RaceFormState extends State<RaceForm> {
   String? _kilometragem;
   File? _capturedImage;
   List<Race> races = [];
-
-  void getRaces() async {
-    List<Race> getRace = await RaceUtils.getRaces();
-
-    setState(() {
-      races = getRace;
-    });
-  }
+  late User user;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getRaces();
   }
 
   @override
   Widget build(BuildContext context) {
     final data = Get.arguments;
-    User user = data['user'];
-
+    user = data['user'];
+    races = data['races'];
     return Scaffold(
       appBar: AppBar(
-        title: Text("Registro de Corrida"),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text(
+          "Registro de Corrida",
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
         leading: GestureDetector(
           onTap: () {
-            Navigator.pop(context);
-            Get.toNamed('/', arguments: {"user": user});
+            Get.offAndToNamed('/', arguments: {"user": user});
           },
-          child: Icon(Icons.arrow_back_rounded),
+          child: Icon(
+            Icons.arrow_back_rounded,
+            color: Colors.black,
+          ),
         ),
       ),
       body: Padding(
@@ -76,7 +76,7 @@ class _RaceFormState extends State<RaceForm> {
                     _buildKilometragemField(),
                     SizedBox(height: 20),
                     _buildImageUploadSection(),
-                    SizedBox(height: 20),
+                    SizedBox(height: 30),
                     _buildSubmitButton(user),
                   ],
                 ),
@@ -86,11 +86,11 @@ class _RaceFormState extends State<RaceForm> {
               height: 20,
             ),
             Divider(
-              height: 20,
+              height: 50,
               color: Colors.black,
             ),
             Text(
-              "Ultimos Registros",
+              "Ultimo Registro",
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: kDefaultColors,
@@ -98,46 +98,14 @@ class _RaceFormState extends State<RaceForm> {
             ),
             Flexible(
               child: ListView.builder(
-                  itemCount: races.length,
+                  itemCount: 1,
                   shrinkWrap: true,
                   reverse: true,
                   itemBuilder: (context, index) {
-                    Race race = races[index];
+                    Race race = races[races.length - 1];
                     print(index);
-                    return Card(
-                      color: kDefaultColors,
-                      margin: EdgeInsets.all(8.0),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Text(
-                              '${race.odometer} Kilômetros',
-                              style: TextStyle(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
-                            SizedBox(height: 8.0),
-                            Row(
-                              children: [
-                                Text(
-                                  'Data: ${race.date}', // Replace with actual date
-                                  style: TextStyle(
-                                      fontSize: 16.0, color: Colors.white),
-                                ),
-                                SizedBox(width: 8.0),
-                                Text(
-                                  'Hora: ${race.time}', // Replace with actual time
-                                  style: TextStyle(
-                                      fontSize: 16.0, color: Colors.white),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
+                    return RaceCard(
+                      race: race,
                     );
                   }),
             )
@@ -188,7 +156,7 @@ class _RaceFormState extends State<RaceForm> {
 
   Widget _buildImageUploadSection() {
     return SizedBox(
-      height: 120,
+      height: 130,
       child: Row(
         children: [
           ElevatedButton.icon(
@@ -210,9 +178,12 @@ class _RaceFormState extends State<RaceForm> {
                     alignment: Alignment.center,
                   ),
                 )
-              : Text(
-                  "Tire uma foto da nota",
-                  style: TextStyle(color: Colors.redAccent),
+              : Container(
+                  child: Text(
+                    "Sem foto",
+                    style: TextStyle(
+                        color: Colors.redAccent, fontWeight: FontWeight.bold),
+                  ),
                 ),
         ],
       ),

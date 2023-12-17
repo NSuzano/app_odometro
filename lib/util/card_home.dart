@@ -1,3 +1,4 @@
+import 'package:app_odometro/constraint/constraint.dart';
 import 'package:flutter/material.dart';
 
 class CardHome extends StatelessWidget {
@@ -20,7 +21,10 @@ class CardHome extends StatelessWidget {
           SizedBox(height: 8.0),
           Text(
             text,
-            style: TextStyle(fontSize: 16.0),
+            style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                color: kDefaultColors),
           ),
         ],
       ),
