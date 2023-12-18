@@ -97,18 +97,21 @@ class _RaceFormState extends State<RaceForm> {
                   fontSize: 20),
             ),
             Flexible(
-              child: ListView.builder(
-                  itemCount: 1,
-                  shrinkWrap: true,
-                  reverse: true,
-                  itemBuilder: (context, index) {
-                    Race race = races[races.length - 1];
-                    print(index);
-                    return RaceCard(
-                      race: race,
-                    );
-                  }),
-            )
+                child: races.isNotEmpty
+                    ? ListView.builder(
+                        itemCount: 1,
+                        shrinkWrap: true,
+                        reverse: true,
+                        itemBuilder: (context, index) {
+                          Race? race;
+                          race = races[races.length - 1];
+
+                          print(index);
+                          return RaceCard(
+                            race: race,
+                          );
+                        })
+                    : Text(""))
           ],
         ),
       ),
