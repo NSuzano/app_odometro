@@ -29,6 +29,7 @@ class RaceForm extends StatefulWidget {
 
 class _RaceFormState extends State<RaceForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController controller = TextEditingController();
   String? _kilometragem;
   File? _capturedImage;
   List<Race> races = [];
@@ -49,7 +50,7 @@ class _RaceFormState extends State<RaceForm> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text(
+        title: const Text(
           "Registro de Corrida",
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
@@ -57,7 +58,7 @@ class _RaceFormState extends State<RaceForm> {
           onTap: () {
             Get.offAndToNamed('/', arguments: {"user": user});
           },
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back_rounded,
             color: Colors.black,
           ),
@@ -77,19 +78,19 @@ class _RaceFormState extends State<RaceForm> {
                     SizedBox(height: 20),
                     _buildImageUploadSection(),
                     SizedBox(height: 30),
-                    _buildSubmitButton(user),
+                    _buildSubmitButton(user, context),
                   ],
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
-            Divider(
+            const Divider(
               height: 50,
               color: Colors.black,
             ),
-            Text(
+            const Text(
               "Ultimo Registro",
               style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -106,12 +107,11 @@ class _RaceFormState extends State<RaceForm> {
                           Race? race;
                           race = races[races.length - 1];
 
-                          print(index);
                           return RaceCard(
                             race: race,
                           );
                         })
-                    : Text(""))
+                    : const Text(""))
           ],
         ),
       ),
@@ -121,15 +121,16 @@ class _RaceFormState extends State<RaceForm> {
   Widget _buildKilometragemField() {
     return Column(
       children: [
-        Text(
+        const Text(
           "Novo Registro",
           style: TextStyle(
               fontWeight: FontWeight.bold, color: kDefaultColors, fontSize: 20),
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         TextFormField(
+          controller: controller,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
           decoration: InputDecoration(
             prefixIcon: Icon(Icons.directions_car_filled_rounded),
@@ -165,12 +166,12 @@ class _RaceFormState extends State<RaceForm> {
           ElevatedButton.icon(
             onPressed: _onImageUploadPressed,
             icon: Icon(Icons.photo, color: Colors.redAccent),
-            label: Text(
+            label: const Text(
               "Enviar Foto",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
-          SizedBox(width: 40),
+          const SizedBox(width: 40),
           _capturedImage != null
               ? Container(
                   height: 120,
@@ -182,7 +183,7 @@ class _RaceFormState extends State<RaceForm> {
                   ),
                 )
               : Container(
-                  child: Text(
+                  child: const Text(
                     "Sem foto",
                     style: TextStyle(
                         color: Colors.redAccent, fontWeight: FontWeight.bold),
@@ -193,13 +194,13 @@ class _RaceFormState extends State<RaceForm> {
     );
   }
 
-  Widget _buildSubmitButton(User user) {
+  Widget _buildSubmitButton(User user, BuildContext context) {
     return SizedBox(
       height: 60,
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () => _onSubmitPressed(user),
-        child: Text(
+        onPressed: () => _onSubmitPressed(user, context),
+        child: const Text(
           'Enviar',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
@@ -217,13 +218,13 @@ class _RaceFormState extends State<RaceForm> {
     });
   }
 
-  void _onSubmitPressed(User user) async {
+  void _onSubmitPressed(User user, BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       if (_capturedImage == null) {
         // Show an error message if an image is not selected
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Por favor, selecione uma imagem antes de enviar.'),
+          const SnackBar(
+            content: Text('Selecione uma imagem antes de enviar.'),
             duration: Duration(seconds: 2),
             backgroundColor: Colors.red,
           ),
@@ -246,7 +247,7 @@ class _RaceFormState extends State<RaceForm> {
         print(hora);
 
         try {
-          await postRace(
+          String response = await postRace(
               _kilometragem!,
               position.latitude.toString(),
               position.longitude.toString(),
@@ -254,17 +255,26 @@ class _RaceFormState extends State<RaceForm> {
               data,
               user.id!,
               _capturedImage);
-        } catch (e) {
-          if (e == "Registro inserido com sucesso") {
-            ReusableSnackbar.showSnackbar(
-                context, e.toString(), Colors.greenAccent);
-            Navigator.pop(context);
-          } else {
-            ReusableSnackbar.showSnackbar(
-                context, e.toString(), Colors.redAccent);
-            Navigator.pop(context);
-            Get.offAndToNamed('raceForm', arguments: {"user": user});
+
+          races = [];
+          controller.clear();
+          _capturedImage = null;
+          List<Race> listRaces = await RaceUtils.getRaces(user);
+
+          for (Race race in listRaces) {
+            log(race.kms.toString());
           }
+
+          setState(() {
+            races = listRaces;
+          });
+
+          ReusableSnackbar.showSnackbar(context, response, Colors.greenAccent);
+        } catch (e) {
+          ReusableSnackbar.showSnackbar(
+              context, e.toString(), Colors.redAccent);
+        } finally {
+          Navigator.pop(context); // Close the loading dialog
         }
       }
     }
@@ -294,7 +304,7 @@ class _RaceFormState extends State<RaceForm> {
 
       print("json Response $jsonResponse");
 
-      throw jsonResponse['message'];
+      return jsonResponse['message'];
     } catch (e) {
       return Future.error(e);
     }

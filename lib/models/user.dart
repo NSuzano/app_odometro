@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:ffi';
 import 'dart:typed_data';
 
@@ -72,9 +73,11 @@ class User {
 
         return user;
       } else {
+        print(response.bodyBytes);
         throw jsonResponse['message'];
       }
     } catch (e) {
+      log(e.toString());
       return Future.error(e);
     }
   }
