@@ -19,14 +19,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: kDefaultColors, fontFamily: 'Montserrat'),
+      theme: ThemeData(primaryColor: kDefaultColors, fontFamily: 'Montserrat'),
       initialRoute: 'login',
       routes: {
-        '/': (context) => Home(),
+        '/': (context) => const Home(),
         'login': (context) => Login(),
-        'expensives': (context) => ExpansesPage(),
-        'race': (context) => RaceForm(),
-        'list-race': (context) => ListRace(),
+        'expensives': (context) => const ExpansesPage(),
+        'race': (context) => const RaceForm(),
+        'list-race': (context) => const ListRace(),
       },
     );
   }

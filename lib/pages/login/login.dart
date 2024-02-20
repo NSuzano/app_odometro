@@ -57,7 +57,7 @@ class _LoginState extends State<Login> {
                     },
                     controller: emailController,
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.email),
+                      prefixIcon: const Icon(Icons.email),
                       floatingLabelBehavior: FloatingLabelBehavior.never,
                       labelText: "Email",
                       labelStyle: const TextStyle(color: Colors.grey),
@@ -79,7 +79,7 @@ class _LoginState extends State<Login> {
                     },
                     controller: passwordController,
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.password),
+                      prefixIcon: const Icon(Icons.password),
                       floatingLabelBehavior: FloatingLabelBehavior.never,
                       labelText: "Senha",
                       labelStyle: const TextStyle(color: Colors.grey),
@@ -92,10 +92,11 @@ class _LoginState extends State<Login> {
                     ),
                     obscureText: true,
                   ),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(
+                      backgroundColor: kDefaultColors,
+                      padding: const EdgeInsets.symmetric(
                           horizontal: 100, vertical: 20), // Button padding
                       shape: RoundedRectangleBorder(
                         borderRadius:
@@ -108,7 +109,7 @@ class _LoginState extends State<Login> {
                         showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return LoadingDialog();
+                              return const LoadingDialog();
                             });
                         // Handle login logic here
                         String email = emailController.text;

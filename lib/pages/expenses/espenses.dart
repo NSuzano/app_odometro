@@ -42,7 +42,7 @@ class _ExpansesPageState extends State<ExpansesPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text(
+        title: const Text(
           "Outras Dispesas",
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
@@ -51,7 +51,7 @@ class _ExpansesPageState extends State<ExpansesPage> {
             Navigator.pop(context);
             Get.toNamed('/', arguments: {"user": user});
           },
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back_rounded,
             color: Colors.black,
           ),
@@ -64,23 +64,23 @@ class _ExpansesPageState extends State<ExpansesPage> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  Text(
+                  const Text(
                     "Formulário de despesas",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: kDefaultColors,
                         fontSize: 20),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   TextFormField(
                     controller: _codigoNotaController,
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.note_sharp),
+                      prefixIcon: const Icon(Icons.note_sharp),
                       floatingLabelBehavior: FloatingLabelBehavior.never,
                       labelText: "Código da nota",
                       labelStyle: const TextStyle(color: Colors.grey),
@@ -98,11 +98,11 @@ class _ExpansesPageState extends State<ExpansesPage> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   TextFormField(
                     controller: _valorNotaController,
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.monetization_on),
+                      prefixIcon: const Icon(Icons.monetization_on),
                       floatingLabelBehavior: FloatingLabelBehavior.never,
                       labelText: "Valor da nota",
                       labelStyle: const TextStyle(color: Colors.grey),
@@ -114,7 +114,7 @@ class _ExpansesPageState extends State<ExpansesPage> {
                       ),
                     ),
                     keyboardType:
-                        TextInputType.numberWithOptions(decimal: true),
+                        const TextInputType.numberWithOptions(decimal: true),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(
                           RegExp(r'^\d+\.?\d{0,2}')),
@@ -126,11 +126,11 @@ class _ExpansesPageState extends State<ExpansesPage> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   TextFormField(
                     controller: _tipoPagamentoController,
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.payment),
+                      prefixIcon: const Icon(Icons.payment),
                       floatingLabelBehavior: FloatingLabelBehavior.never,
                       labelText: "Tipo de pagamento",
                       labelStyle: const TextStyle(color: Colors.grey),
@@ -148,13 +148,16 @@ class _ExpansesPageState extends State<ExpansesPage> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   _buildImageUploadSection(),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   SizedBox(
                     height: 60,
                     width: double.infinity,
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: kDefaultColors,
+                          foregroundColor: Colors.white),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           // Form is validated, perform your desired action here
@@ -163,7 +166,7 @@ class _ExpansesPageState extends State<ExpansesPage> {
                           print('Form is valid');
                         }
                       },
-                      child: Text(
+                      child: const Text(
                         'Enviar',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
@@ -182,14 +185,16 @@ class _ExpansesPageState extends State<ExpansesPage> {
       child: Row(
         children: [
           ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+                backgroundColor: kDefaultColors, foregroundColor: Colors.white),
             onPressed: _onImageUploadPressed,
-            icon: Icon(Icons.photo, color: Colors.redAccent),
-            label: Text(
+            icon: const Icon(Icons.photo, color: Colors.redAccent),
+            label: const Text(
               "Enviar Foto",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
-          SizedBox(width: 40),
+          const SizedBox(width: 40),
           _capturedImage != null
               ? Container(
                   height: 120,
@@ -200,7 +205,7 @@ class _ExpansesPageState extends State<ExpansesPage> {
                     alignment: Alignment.center,
                   ),
                 )
-              : Text(
+              : const Text(
                   "Tire uma foto da nota",
                   style: TextStyle(color: Colors.redAccent),
                 ),

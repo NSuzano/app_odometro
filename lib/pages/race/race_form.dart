@@ -65,7 +65,7 @@ class _RaceFormState extends State<RaceForm> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0),
         child: Column(
           children: [
             Form(
@@ -75,9 +75,9 @@ class _RaceFormState extends State<RaceForm> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     _buildKilometragemField(),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     _buildImageUploadSection(),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     _buildSubmitButton(user, context),
                   ],
                 ),
@@ -133,7 +133,7 @@ class _RaceFormState extends State<RaceForm> {
           controller: controller,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
           decoration: InputDecoration(
-            prefixIcon: Icon(Icons.directions_car_filled_rounded),
+            prefixIcon: const Icon(Icons.directions_car_filled_rounded),
             floatingLabelBehavior: FloatingLabelBehavior.never,
             labelText: "Kilometragem",
             labelStyle: const TextStyle(color: Colors.grey),
@@ -164,8 +164,10 @@ class _RaceFormState extends State<RaceForm> {
       child: Row(
         children: [
           ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+                backgroundColor: kDefaultColors, foregroundColor: Colors.white),
             onPressed: _onImageUploadPressed,
-            icon: Icon(Icons.photo, color: Colors.redAccent),
+            icon: const Icon(Icons.photo, color: Colors.redAccent),
             label: const Text(
               "Enviar Foto",
               style: TextStyle(fontWeight: FontWeight.bold),
@@ -199,8 +201,10 @@ class _RaceFormState extends State<RaceForm> {
       height: 60,
       width: double.infinity,
       child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            backgroundColor: kDefaultColors, foregroundColor: Colors.white),
         onPressed: () => _onSubmitPressed(user, context),
-        child: const Text(
+        child: Text(
           'Enviar',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
