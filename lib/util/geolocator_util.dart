@@ -6,7 +6,6 @@ class UserLocation {
   static Future<Position> determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
-    late LocationSettings locationSettings;
 
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();

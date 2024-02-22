@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:app_odometro/util/recognization_page.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 

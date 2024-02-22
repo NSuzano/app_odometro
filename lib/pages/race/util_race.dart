@@ -8,10 +8,6 @@ import '../../models/race.dart';
 
 class RaceUtils {
   static Future<List<Race>> getRaces(User user) async {
-    Map json = {"user_id": user.id.toString()};
-
-    var jsonSend = jsonEncode(json);
-    List<Race> race;
     try {
       var response = await http
           .get(Uri.parse(kRaceGet), headers: {"Accept": "application/json"});

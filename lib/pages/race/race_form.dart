@@ -13,11 +13,8 @@ import '../../constraint/constraint.dart';
 import '../../models/race.dart';
 import '../../models/user.dart';
 import '../../util/geolocator_util.dart';
-import '../../util/image_cropper_page.dart';
 import '../../util/image_picker_class.dart';
 import '../../util/loading_dialog.dart';
-import '../../util/modal_dialog.dart';
-import '../../util/recognization_page.dart';
 import '../../util/snackbar.dart';
 
 class RaceForm extends StatefulWidget {

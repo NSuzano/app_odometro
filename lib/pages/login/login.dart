@@ -1,5 +1,4 @@
 import 'package:app_odometro/constraint/constraint.dart';
-import 'package:app_odometro/pages/home/home.dart';
 import 'package:app_odometro/util/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

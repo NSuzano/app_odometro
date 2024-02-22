@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:ffi';
-import 'dart:typed_data';
 
 import 'package:app_odometro/constraint/constraint.dart';
 import 'package:http/http.dart' as http;
