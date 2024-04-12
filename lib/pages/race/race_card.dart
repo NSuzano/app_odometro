@@ -1,3 +1,4 @@
+import 'package:app_odometro/util/formats/date_br.dart';
 import 'package:flutter/material.dart';
 
 import '../../constraint/constraint.dart';
@@ -9,6 +10,8 @@ class RaceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String brazilianDate = convertIsoDateToBrazilian(race.raceStart!.date!);
+
     return Card(
       color: race.raceEnd == null ? Colors.red : kDefaultColors,
       margin: const EdgeInsets.all(8.0),
@@ -52,7 +55,7 @@ class RaceCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Data: ${race.raceStart!.date}',
+                        'Data: $brazilianDate',
                         style: const TextStyle(
                             fontSize: 12.0, color: Colors.white),
                       ),
