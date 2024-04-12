@@ -99,7 +99,6 @@ class _RaceFormState extends State<RaceForm> {
                     ? ListView.builder(
                         itemCount: 1,
                         shrinkWrap: true,
-                        reverse: true,
                         itemBuilder: (context, index) {
                           Race? race;
                           race = races[races.length - 1];
@@ -241,10 +240,10 @@ class _RaceFormState extends State<RaceForm> {
         // Dados válidos, faça o que precisa aqui
 
         String data =
-            "${position.timestamp!.year}-${position.timestamp!.month}-${position.timestamp!.day}";
+            "${position.timestamp.year}-${position.timestamp.month}-${position.timestamp.day}";
         print(data);
         print(position.timestamp);
-        String hora = DateFormat("hh:mm:ss").format(position.timestamp!);
+        String hora = DateFormat("hh:mm:ss").format(position.timestamp);
         print(hora);
 
         try {

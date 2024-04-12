@@ -10,6 +10,7 @@ class User {
   String? name;
   String? email;
   int? status;
+  static late String token;
   String? role;
   String? image;
   String? emailVerifiedAt;
@@ -66,6 +67,8 @@ class User {
       if (response.statusCode == 200) {
         Map<String, dynamic> userInfo =
             JwtDecoder.decode(jsonResponse['token']);
+
+        token = jsonResponse['token'];
 
         user = User.fromJson(userInfo);
 

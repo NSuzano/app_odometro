@@ -43,14 +43,14 @@ class _ListRaceState extends State<ListRace> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Text(
+            const Text(
               "Todos os Registros",
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: kDefaultColors,
                   fontSize: 20),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             races.isNotEmpty
@@ -58,7 +58,6 @@ class _ListRaceState extends State<ListRace> {
                     child: ListView.builder(
                         itemCount: races.length,
                         shrinkWrap: true,
-                        reverse: true,
                         itemBuilder: (context, index) {
                           Race? race;
                           race = races[index];
@@ -68,7 +67,7 @@ class _ListRaceState extends State<ListRace> {
                             race: race,
                           );
                         }))
-                : Container(
+                : const SizedBox(
                     height: 600,
                     child: Center(
                         child: Text(
