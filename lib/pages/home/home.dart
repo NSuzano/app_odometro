@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
+import '../../constraint/constraint.dart';
 import '../../models/race.dart';
 import '../../models/user.dart';
 
@@ -31,6 +32,7 @@ class _HomeState extends State<Home> {
           elevation: 0,
           centerTitle: true,
           title: Text(user.name!),
+          backgroundColor: kDefaultColors,
           leading: Padding(
             padding: const EdgeInsets.all(7.0),
             child: SizedBox(
@@ -76,7 +78,7 @@ class _HomeState extends State<Home> {
                       onTap: () async {
                         List<Race> races = await RaceUtils.getRaces(user);
 
-                        Get.toNamed('race',
+                        Get.toNamed('list-race',
                             arguments: {"user": user, "races": races});
                       },
                       child: const CardHome(
@@ -93,14 +95,11 @@ class _HomeState extends State<Home> {
                     ),
                     GestureDetector(
                       onTap: () async {
-                        List<Race> races = await RaceUtils.getRaces(user);
-
-                        Get.toNamed('list-race',
-                            arguments: {"user": user, "races": races});
+                        Get.toNamed('survey-page', arguments: {"user": user});
                       },
                       child: const CardHome(
                           image: "assets/icons/honorarios.png",
-                          text: "Lista de Registros"),
+                          text: "Vistoria"),
                     ),
                   ],
                 ),

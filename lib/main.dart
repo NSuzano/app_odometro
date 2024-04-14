@@ -3,6 +3,7 @@ import 'package:app_odometro/pages/expenses/espenses.dart';
 import 'package:app_odometro/pages/listrace/list_race.dart';
 import 'package:app_odometro/pages/login/login.dart';
 import 'package:app_odometro/pages/race/race_form.dart';
+import 'package:app_odometro/pages/survey/survey_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         'expensives': (context) => const ExpansesPage(),
         'race': (context) => const RaceForm(),
         'list-race': (context) => const ListRace(),
+        'survey-page': (context) => const SurveyPage(),
       },
     );
   }

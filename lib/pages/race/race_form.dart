@@ -53,7 +53,7 @@ class _RaceFormState extends State<RaceForm> {
         ),
         leading: GestureDetector(
           onTap: () {
-            Get.offAndToNamed('/', arguments: {"user": user});
+            Navigator.pop(context);
           },
           child: const Icon(
             Icons.arrow_back_rounded,
@@ -201,7 +201,7 @@ class _RaceFormState extends State<RaceForm> {
         style: ElevatedButton.styleFrom(
             backgroundColor: kDefaultColors, foregroundColor: Colors.white),
         onPressed: () => _onSubmitPressed(user, context),
-        child: Text(
+        child: const Text(
           'Enviar',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
@@ -276,6 +276,8 @@ class _RaceFormState extends State<RaceForm> {
               context, e.toString(), Colors.redAccent);
         } finally {
           Navigator.pop(context); // Close the loading dialog
+
+          Get.offNamed("list-race", arguments: {"user": user, "races": races});
         }
       }
     }

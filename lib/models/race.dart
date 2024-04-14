@@ -4,7 +4,7 @@ class Race {
   int? endRaceId;
   int? userId;
   int? kms;
-  int? status;
+  String? status;
   String? value;
   String? createdAt;
   String? updatedAt;
@@ -36,34 +36,33 @@ class Race {
     value = json['value'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
-    user = json['user'] != null ? new UserRace.fromJson(json['user']) : null;
+    user = json['user'] != null ? UserRace.fromJson(json['user']) : null;
     raceStart = json['race_start'] != null
-        ? new RaceStart.fromJson(json['race_start'])
+        ? RaceStart.fromJson(json['race_start'])
         : null;
-    raceEnd = json['race_end'] != null
-        ? new RaceStart.fromJson(json['race_end'])
-        : null;
+    raceEnd =
+        json['race_end'] != null ? RaceStart.fromJson(json['race_end']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['start_race_id'] = this.startRaceId;
-    data['end_race_id'] = this.endRaceId;
-    data['user_id'] = this.userId;
-    data['kms'] = this.kms;
-    data['status'] = this.status;
-    data['value'] = this.value;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    if (this.user != null) {
-      data['user'] = this.user!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['start_race_id'] = startRaceId;
+    data['end_race_id'] = endRaceId;
+    data['user_id'] = userId;
+    data['kms'] = kms;
+    data['status'] = status;
+    data['value'] = value;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    if (user != null) {
+      data['user'] = user!.toJson();
     }
-    if (this.raceStart != null) {
-      data['race_start'] = this.raceStart!.toJson();
+    if (raceStart != null) {
+      data['race_start'] = raceStart!.toJson();
     }
-    if (this.raceEnd != null) {
-      data['race_end'] = this.raceEnd!.toJson();
+    if (raceEnd != null) {
+      data['race_end'] = raceEnd!.toJson();
     }
     return data;
   }
@@ -83,10 +82,10 @@ class UserRace {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['email'] = this.email;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['email'] = email;
     return data;
   }
 }
@@ -126,16 +125,16 @@ class RaceStart {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['longitude'] = this.longitude;
-    data['latitude'] = this.latitude;
-    data['time'] = this.time;
-    data['date'] = this.date;
-    data['odometer'] = this.odometer;
-    data['user_id'] = this.userId;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['longitude'] = longitude;
+    data['latitude'] = latitude;
+    data['time'] = time;
+    data['date'] = date;
+    data['odometer'] = odometer;
+    data['user_id'] = userId;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
     return data;
   }
 }
