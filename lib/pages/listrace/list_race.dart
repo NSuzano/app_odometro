@@ -26,22 +26,22 @@ class _ListRaceState extends State<ListRace> {
 
     return Scaffold(
         appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            leading: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: const Icon(
-                Icons.arrow_back_rounded,
-                color: Colors.black,
-              ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: const Icon(
+              Icons.arrow_back_rounded,
+              color: Colors.black,
             ),
-            title: const Text(
-              "Lista de Registros",
-              style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-            )),
+          ),
+          title: const Text(
+            "Lista de Registros",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+        ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -61,7 +61,6 @@ class _ListRaceState extends State<ListRace> {
                       child: ListView.builder(
                           itemCount: races.length,
                           shrinkWrap: true,
-                          reverse: true,
                           itemBuilder: (context, index) {
                             Race? race;
                             race = races[index];
@@ -71,9 +70,9 @@ class _ListRaceState extends State<ListRace> {
                               race: race,
                             );
                           }))
-                  : Container(
+                  : const SizedBox(
                       height: 600,
-                      child: const Center(
+                      child: Center(
                           child: Text(
                         "Sem registros",
                         style: TextStyle(fontWeight: FontWeight.bold),
