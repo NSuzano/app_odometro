@@ -43,13 +43,12 @@ class _ExpansesPageState extends State<ExpansesPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: const Text(
-          "Outras Dispesas",
+          "Dispesas",
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
-            Get.toNamed('/', arguments: {"user": user});
           },
           child: const Icon(
             Icons.arrow_back_rounded,

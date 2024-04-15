@@ -20,9 +20,8 @@ class RaceCard extends StatelessWidget {
         children: [
           // Coluna para o ícone
           Container(
-            color: Colors.white, // Cor de fundo branca para o ícone
-
-            // ignore: prefer_const_constructors
+            width: 10,
+            color: race.raceEnd == null ? Colors.redAccent : Colors.green,
           ),
           Expanded(
             // Container expandido para os outros widgets
@@ -31,16 +30,31 @@ class RaceCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    double.parse(race.value!) > 0.00
-                        ? "Valor: R\$ ${race.value} "
-                        : 'Kilômetros Inicial: ${race.raceStart!.odometer} KM',
-                    style: const TextStyle(
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        race.status == "completed"
+                            ? "Valor: R\$ ${race.value} "
+                            : 'Kilômetros Inicial: ${race.raceStart!.odometer} KM',
+                        style: const TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                      race.status == "completed"
+                          ? const Icon(
+                              Icons.check_circle,
+                              color: Colors.white,
+                            )
+                          : const Text("")
+                    ],
                   ),
-                  const SizedBox(height: 8.0),
+                  const Divider(
+                    color: Colors.white,
+                    thickness: 2,
+                  ),
+                  const SizedBox(height: 10),
                   race.status != "started"
                       ? Text(
                           "KM Inicial : ${race.raceStart!.odometer} - Km Final : ${race.raceEnd!.odometer}",

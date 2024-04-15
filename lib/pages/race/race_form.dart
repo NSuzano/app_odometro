@@ -3,12 +3,14 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:app_odometro/pages/race/race_card.dart';
-import 'package:app_odometro/pages/race/util_race.dart';
+import 'package:app_odometro/util/providers/races_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../../constraint/constraint.dart';
 import '../../models/race.dart';
 import '../../models/user.dart';
@@ -29,8 +31,8 @@ class _RaceFormState extends State<RaceForm> {
   TextEditingController controller = TextEditingController();
   String? _kilometragem;
   File? _capturedImage;
-  List<Race> races = [];
   late User user;
+  List<Race> races = [];
 
   @override
   void initState() {
@@ -40,9 +42,12 @@ class _RaceFormState extends State<RaceForm> {
 
   @override
   Widget build(BuildContext context) {
+    final raceProvider = Provider.of<RaceProvider>(context);
+
     final data = Get.arguments;
     user = data['user'];
-    races = data['races'];
+
+    races = raceProvider.races;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -61,13 +66,13 @@ class _RaceFormState extends State<RaceForm> {
           ),
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Form(
-              key: _formKey,
-              child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Form(
+                key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -75,41 +80,44 @@ class _RaceFormState extends State<RaceForm> {
                     const SizedBox(height: 20),
                     _buildImageUploadSection(),
                     const SizedBox(height: 30),
-                    _buildSubmitButton(user, context),
+                    _buildSubmitButton(user, context, raceProvider),
                   ],
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            const Divider(
-              height: 50,
-              color: Colors.black,
-            ),
-            const Text(
-              "Ultimo Registro",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: kDefaultColors,
-                  fontSize: 20),
-            ),
-            Flexible(
-                child: races.isNotEmpty
-                    ? ListView.builder(
-                        itemCount: 1,
-                        shrinkWrap: true,
-                        reverse: true,
-                        itemBuilder: (context, index) {
-                          Race? race;
-                          race = races[races.length - 1];
+              const SizedBox(
+                height: 20,
+              ),
+              const Divider(
+                height: 50,
+                color: Colors.black,
+              ),
+              const Text(
+                "Ultimo Registro",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: kDefaultColors,
+                    fontSize: 20),
+              ),
+              Container(
+                  height: 150,
+                  child: races.isNotEmpty
+                      ? ListView.builder(
+                          itemCount: 1,
+                          shrinkWrap: true,
+                          reverse: true,
+                          itemBuilder: (context, index) {
+                            Race? race;
+                            race = races[races.length - 1];
 
-                          return RaceCard(
-                            race: race,
-                          );
-                        })
-                    : const Text(""))
-          ],
+                            print(races.length);
+
+                            return RaceCard(
+                              race: race,
+                            );
+                          })
+                      : const Text(""))
+            ],
+          ),
         ),
       ),
     );
@@ -193,14 +201,15 @@ class _RaceFormState extends State<RaceForm> {
     );
   }
 
-  Widget _buildSubmitButton(User user, BuildContext context) {
+  Widget _buildSubmitButton(
+      User user, BuildContext context, RaceProvider raceProvider) {
     return SizedBox(
       height: 60,
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
             backgroundColor: kDefaultColors, foregroundColor: Colors.white),
-        onPressed: () => _onSubmitPressed(user, context),
+        onPressed: () => _onSubmitPressed(user, context, raceProvider),
         child: const Text(
           'Enviar',
           style: TextStyle(fontWeight: FontWeight.bold),
@@ -219,7 +228,8 @@ class _RaceFormState extends State<RaceForm> {
     });
   }
 
-  void _onSubmitPressed(User user, BuildContext context) async {
+  void _onSubmitPressed(
+      User user, BuildContext context, RaceProvider raceProvider) async {
     if (_formKey.currentState!.validate()) {
       if (_capturedImage == null) {
         // Show an error message if an image is not selected
@@ -260,14 +270,15 @@ class _RaceFormState extends State<RaceForm> {
           races = [];
           controller.clear();
           _capturedImage = null;
-          List<Race> listRaces = await RaceUtils.getRaces(user);
 
-          for (Race race in listRaces) {
+          // List<Race> listRaces = await RaceUtils.getRaces(user);
+          raceProvider.fetchRaces(user);
+          for (Race race in raceProvider.races) {
             log(race.kms.toString());
           }
 
           setState(() {
-            races = listRaces;
+            races = raceProvider.races;
           });
 
           ReusableSnackbar.showSnackbar(context, response, Colors.greenAccent);
@@ -277,7 +288,7 @@ class _RaceFormState extends State<RaceForm> {
         } finally {
           Navigator.pop(context); // Close the loading dialog
 
-          Get.offNamed("list-race", arguments: {"user": user, "races": races});
+          Navigator.pop(context); // Close the loading dialog
         }
       }
     }
@@ -295,15 +306,20 @@ class _RaceFormState extends State<RaceForm> {
       "date": data,
       "time": hora,
       "user_id": userId.toString(),
-      "voucher_file": base64Image
+      // "voucher_file": base64Imagew
     };
 
     print(jsonPost);
 
     try {
       var response = await http.post(Uri.parse(kRacePost),
-          headers: {"Accept": "application/json"}, body: jsonPost);
+          headers: {"Accept": "application/json", "Authorization": User.token},
+          body: jsonPost);
       Map jsonResponse = jsonDecode(response.body);
+
+      if (jsonResponse["errors"] != null) {
+        throw "Erro ao enviar os dados!";
+      }
 
       print("json Response $jsonResponse");
 
