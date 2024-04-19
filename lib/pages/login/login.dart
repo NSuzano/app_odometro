@@ -115,10 +115,10 @@ class _LoginState extends State<Login> {
                         String password = passwordController.text;
                         // You can add your authentication logic here
                         try {
-                          user = await User.login(email, password);
+                          user = await User.login(email, password, context);
 
                           Navigator.pop(context);
-                          Get.offAndToNamed('/', arguments: {"user": user});
+                          Get.offAndToNamed('home');
                         } catch (e) {
                           ReusableSnackbar.showSnackbar(
                               context, "$e", Colors.redAccent);
