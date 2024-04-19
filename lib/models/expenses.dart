@@ -20,8 +20,8 @@ class Expenses {
   String? centerOfCost;
   String? project;
   int? userId;
-  DateTime? createdAt;
-  DateTime? updatedAt;
+  String? createdAt;
+  String? updatedAt;
   User? user;
   Categories? category;
 
@@ -50,7 +50,7 @@ class Expenses {
       this.category});
 
   Expenses.fromJson(Map<String, dynamic> json) {
-    // id = int.parse(json['id']);
+    id = json['id'];
     type = json['type'] ?? "";
     externalCode = json['external_code'] ?? "";
     transactionCode = json['transaction_code'] ?? "";
@@ -68,8 +68,8 @@ class Expenses {
     centerOfCost = json['center_of_cost'] ?? "";
     project = json['project'] ?? "";
     userId = json['user_id'] ?? "";
-    createdAt = DateTime.parse(json['created_at']);
-    updatedAt = DateTime.parse(json['updated_ at']);
+    createdAt = json['created_at'];
+    updatedAt = json['updated_ at'];
     user = json['user'] != null ? User.fromJsoExpanses(json['user']) : null;
     category = json['category'] != null
         ? Categories.fromJsonExpanses(json['category'])
@@ -77,7 +77,7 @@ class Expenses {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['type'] = type;
     data['external_code'] = externalCode;
