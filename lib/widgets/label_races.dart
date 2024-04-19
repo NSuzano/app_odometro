@@ -13,7 +13,7 @@ class LabelRace extends StatelessWidget {
           children: [
             Icon(
               Icons.fiber_manual_record,
-              color: Colors.redAccent,
+              color: kDefaultColors,
             ),
             Text(
               "Corrida Iniciada",
@@ -25,7 +25,7 @@ class LabelRace extends StatelessWidget {
           children: [
             Icon(
               Icons.fiber_manual_record,
-              color: kDefaultColors,
+              color: Colors.green,
             ),
             Text(
               "Corrida Finalizada",
