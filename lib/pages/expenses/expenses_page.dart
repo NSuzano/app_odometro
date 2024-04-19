@@ -1,21 +1,69 @@
 import 'package:app_odometro/constraint/constraint.dart';
 import 'package:app_odometro/models/expenses.dart';
 import 'package:app_odometro/models/user.dart';
+import 'package:app_odometro/pages/expenses/expenses_card.dart';
 import 'package:app_odometro/util/providers/expenses_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class ExpensesForm extends StatefulWidget {
-  const ExpensesForm({super.key});
+class ExpensesPage extends StatefulWidget {
+  const ExpensesPage({super.key});
 
   @override
-  State<ExpensesForm> createState() => _ExpensesFormState();
+  State<ExpensesPage> createState() => _ExpensesPageState();
 }
 
-class _ExpensesFormState extends State<ExpensesForm> {
+class _ExpensesPageState extends State<ExpensesPage> {
   late User user;
   List<Expenses> expenses = [];
+  late ScrollController _scrollController;
+  bool _isButtonVisible = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
+    _scrollController.addListener(_handleScrollDirectionChange);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      final expenseProvider =
+          Provider.of<ExpenseProvider>(context, listen: false);
+      if (expenseProvider.hasMore) {
+        expenseProvider.fetchExpenses(user, expenseProvider.currentPage);
+      }
+    }
+  }
+
+  void _handleScrollDirectionChange() {
+    if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.reverse) {
+      if (_isButtonVisible) {
+        setState(() {
+          _isButtonVisible = false;
+        });
+      }
+    } else if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.forward) {
+      if (!_isButtonVisible) {
+        setState(() {
+          _isButtonVisible = true;
+        });
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,39 +91,71 @@ class _ExpensesFormState extends State<ExpensesForm> {
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
         ),
-        body: const Padding(
-          padding: EdgeInsets.all(16.0),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              Text(
+              const Text(
                 "Todos os Registros",
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: kDefaultColors,
                     fontSize: 20),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              SizedBox(
-                height: 600,
-                child: Center(
-                    child: Text(
-                  "Sem registros",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                )),
-              )
+              expenses.isNotEmpty
+                  ? Flexible(
+                      child: ListView.builder(
+                          controller: _scrollController,
+                          itemCount: expenses.length +
+                              (expenseProvider.hasMore ? 1 : 0),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            if (index == expenses.length &&
+                                expenseProvider.hasMore) {
+                              // Renderiza um widget de carregamento no final
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+
+                            Expenses? expense;
+                            expense = expenses[index];
+
+                            print(index);
+
+                            return ExpensesCard(
+                              expenses: expense,
+                            );
+                          }))
+                  : const SizedBox(
+                      height: 600,
+                      child: Center(
+                          child: Text(
+                        "Sem registros",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      )),
+                    )
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          backgroundColor: kDefaultColors,
-          foregroundColor: kDefaultColorWhite,
-          onPressed: () async {
-            Get.toNamed('expensives', arguments: {"user": user});
-          },
-          icon: const Icon(Icons.add),
-          label: const Text("Nova Dispesa"),
-        ));
+        floatingActionButton: _isButtonVisible
+            ? FloatingActionButton.extended(
+                backgroundColor: kDefaultColors,
+                foregroundColor: kDefaultColorWhite,
+                onPressed: () async {
+                  Get.toNamed('expensives', arguments: {"user": user});
+                },
+                icon: const Icon(Icons.add),
+                label: const Text("Nova Dispesa"),
+                shape: const StadiumBorder(
+                  side: BorderSide(
+                    color: Colors.white, // Cor da borda
+                    width: 2.0, // Espessura da borda
+                  ),
+                ),
+              )
+            : null);
   }
 }
