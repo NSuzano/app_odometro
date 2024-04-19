@@ -11,8 +11,8 @@ class Car {
   String? owner;
   int? userId;
   int? branchId;
-  String? createdAt;
-  String? updatedAt;
+  DateTime? createdAt;
+  DateTime? updatedAt;
   Branch? branch;
   User? user;
 
@@ -41,8 +41,8 @@ class Car {
     owner = json['owner'];
     userId = json['user_id'];
     branchId = json['branch_id'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    createdAt = DateTime.parse(json['created_at']);
+    updatedAt = DateTime.parse(json['updated_at']);
     branch = json['branch'] != null ? Branch.fromJson(json['branch']) : null;
     user = json['user'] != null ? User.fromJsoExpanses(json['user']) : null;
   }
