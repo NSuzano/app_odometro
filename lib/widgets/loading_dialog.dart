@@ -31,9 +31,9 @@ class LoadingDialog extends StatelessWidget {
                         offset: Offset(0, 10),
                       )
                     ]),
-                child: Column(
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     SizedBox(
                         height: 50,
                         width: 50,
