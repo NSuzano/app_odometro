@@ -1,13 +1,16 @@
+import 'package:app_odometro/pages/car/car_page.dart';
 import 'package:app_odometro/util/card_home.dart';
+import 'package:app_odometro/util/providers/car_provider.dart';
 import 'package:app_odometro/util/providers/expenses_provider.dart';
 import 'package:app_odometro/util/providers/races_provider.dart';
+import 'package:app_odometro/util/providers/user_provider.dart';
+import 'package:app_odometro/widgets/show_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../../constraint/constraint.dart';
-import '../../models/user.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -32,15 +35,19 @@ class _HomeState extends State<Home> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Provider.of<UserProvider>(context, listen: false).loadUserFromPrefs();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final raceProvider = Provider.of<RaceProvider>(context);
     final expenseProvider = Provider.of<ExpenseProvider>(context);
-
-    final data = Get.arguments;
-    User user;
-    user = data['user'];
-
-    print(user.email);
+    final carProvider = Provider.of<CarProvider>(context);
+    final user = Provider.of<UserProvider>(context).user;
+    final userProvider = Provider.of<UserProvider>(context);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
@@ -68,7 +75,11 @@ class _HomeState extends State<Home> {
               padding: const EdgeInsets.all(8.0),
               child: GestureDetector(
                   onTap: () {
-                    Get.offAndToNamed('login');
+                    showCustomDialog(context, "Logout", "Desesa mesmo sair?",
+                        () {
+                      userProvider.cleanUserFromPrefs();
+                      Get.offAndToNamed('login');
+                    });
                   },
                   child: const Padding(
                     padding: EdgeInsets.all(8.0),
@@ -161,7 +172,9 @@ class _HomeState extends State<Home> {
                     ),
                     GestureDetector(
                       onTap: () async {
-                        await expenseProvider.fetchExpenses(user);
+                        expenseProvider.clearExpenses();
+
+                        await expenseProvider.fetchExpenses(user, 1);
                         Get.toNamed('expensives_list',
                             arguments: {"user": user});
                       },
@@ -188,12 +201,14 @@ class _HomeState extends State<Home> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
             if (_areButtonsVisible)
+              _buildFloatingActionButton("Vincular Motorista", Icons.person_add,
+                  "driver", carProvider),
+            if (_areButtonsVisible)
               _buildFloatingActionButton(
-                  "Vincular Motorista", Icons.person_add),
+                  "Cadastrar Carro", Icons.car_rental, "car", carProvider),
             if (_areButtonsVisible)
-              _buildFloatingActionButton("Cadastrar Carro", Icons.car_rental),
-            if (_areButtonsVisible)
-              _buildFloatingActionButton("Cadastrar Categoria", Icons.category),
+              _buildFloatingActionButton("Cadastrar Categoria", Icons.category,
+                  "category", carProvider),
             _buildMainFloatingActionButton(),
           ],
         ),
@@ -201,14 +216,27 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget _buildFloatingActionButton(String title, IconData icon) {
+  Widget _buildFloatingActionButton(
+      String title, IconData icon, String heroTag, CarProvider carProvider) {
+    final user = Provider.of<UserProvider>(context).user;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5.0),
       child: FloatingActionButton.extended(
+        heroTag: heroTag, // Adiciona uma tag única para cada botão
+
         backgroundColor: kDefaultColors,
         onPressed: () {
           // Implementar o que cada botão deve fazer
           print("$title pressed");
+
+          if (title == "Cadastrar Carro") {
+            carProvider.clearCars();
+
+            carProvider.fetchCars(user, 1);
+
+            Get.toNamed('car-page');
+          }
         },
         label: Text(
           title,
@@ -224,6 +252,7 @@ class _HomeState extends State<Home> {
 
   Widget _buildMainFloatingActionButton() {
     return FloatingActionButton(
+      heroTag: "mainFAB", // Adiciona uma tag única para o botão principal
       onPressed: _toggleButtons,
       backgroundColor: kDefaultColors,
       foregroundColor: kDefaultColorWhite,
