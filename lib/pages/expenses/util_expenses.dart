@@ -6,10 +6,14 @@ import 'package:app_odometro/models/user.dart';
 import 'package:http/http.dart' as http;
 
 class ExpensesUtil {
-  static Future<List<Expenses>> getExpenses(User user) async {
+  static Future<List<Expenses>> getExpenses(User user, int page) async {
+    print("PAGE: $page");
     try {
-      var response = await http.get(Uri.parse("$kExpansesGet?type=expense"),
-          headers: {"Accept": "application/json", "Authorization": User.token});
+      var response = await http
+          .get(Uri.parse("$kExpansesGet?type=expense&page=$page"), headers: {
+        "Accept": "application/json",
+        "Authorization": user.token!
+      });
       Map jsonResponse = jsonDecode(response.body);
 
       print(jsonResponse);
