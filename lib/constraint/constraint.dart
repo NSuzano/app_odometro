@@ -10,3 +10,4 @@ const kUserGet = "$kDefautUrl/users";
 const kRacePost = "$kDefautUrl/races";
 const kRaceGet = "$kDefautUrl/reports/races";
 const kExpansesGet = "$kDefautUrl/transactions";
+const kCarsGet = "$kDefautUrl/cars";
