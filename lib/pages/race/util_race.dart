@@ -10,7 +10,7 @@ class RaceUtils {
   static Future<List<Race>> getRaces(User user) async {
     try {
       var response = await http.get(Uri.parse(kRaceGet),
-          headers: {"Accept": "application/json", "Authorization": User.token});
+          headers: {"Accept": "application/json", "Authorization": user.token!});
       Map jsonResponse = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
