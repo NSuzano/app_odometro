@@ -18,10 +18,10 @@ class CardHome extends StatelessWidget {
             width: 100,
             fit: BoxFit.cover,
           ),
-          SizedBox(height: 8.0),
+          const SizedBox(height: 8.0),
           Text(
             text,
-            style: TextStyle(
+            style: const TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
                 color: kDefaultColors),

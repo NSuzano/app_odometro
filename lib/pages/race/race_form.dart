@@ -313,7 +313,7 @@ class _RaceFormState extends State<RaceForm> {
 
     try {
       var response = await http.post(Uri.parse(kRacePost),
-          headers: {"Accept": "application/json", "Authorization": User.token},
+          headers: {"Accept": "application/json", "Authorization": user.token!},
           body: jsonPost);
       Map jsonResponse = jsonDecode(response.body);
 
