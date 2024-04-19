@@ -5,11 +5,23 @@ import 'package:flutter/material.dart';
 
 class ExpenseProvider with ChangeNotifier {
   List<Expenses> _expenses = [];
+  int _currentPage = 1;
+  bool _hasMore = true;
 
   List<Expenses> get expenses => _expenses;
+  bool get hasMore => _hasMore;
+  int get currentPage => _currentPage;
 
-  Future fetchExpenses(User user) async {
-    _expenses = await ExpensesUtil.getExpenses(user);
+  Future fetchExpenses(User user, int page) async {
+    List<Expenses> newExpenses = await ExpensesUtil.getExpenses(user, page);
+    if (newExpenses.length < 10) {
+      _hasMore = false;
+    }
+    _expenses.addAll(newExpenses);
+    _currentPage++;
+
+    print("HAS MORE : $_hasMore");
+
     notifyListeners();
   }
 
@@ -23,8 +35,10 @@ class ExpenseProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setExpenses(List<Expenses> expenses) {
-    _expenses = expenses;
+  void clearExpenses() {
+    _expenses.clear();
+    _currentPage = 1;
+    _hasMore = true;
     notifyListeners();
   }
 }
