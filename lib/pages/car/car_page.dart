@@ -142,7 +142,7 @@ class _CarPageState extends State<CarPage> {
                 backgroundColor: kDefaultColors,
                 foregroundColor: kDefaultColorWhite,
                 onPressed: () async {
-                  Get.toNamed('expensives', arguments: {"user": user});
+                  Get.toNamed('car-form', arguments: {"user": user});
                 },
                 icon: const Icon(Icons.add),
                 label: const Text("Novo Carro"),

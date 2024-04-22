@@ -99,7 +99,7 @@ class _RaceFormState extends State<RaceForm> {
                     fontSize: 20),
               ),
               Container(
-                  height: 150,
+                  height: 170,
                   child: races.isNotEmpty
                       ? ListView.builder(
                           itemCount: 1,
@@ -251,10 +251,10 @@ class _RaceFormState extends State<RaceForm> {
         // Dados válidos, faça o que precisa aqui
 
         String data =
-            "${position.timestamp!.year}-${position.timestamp!.month}-${position.timestamp!.day}";
+            "${position.timestamp.year}-${position.timestamp.month}-${position.timestamp.day}";
         print(data);
         print(position.timestamp);
-        String hora = DateFormat("hh:mm:ss").format(position.timestamp!);
+        String hora = DateFormat("hh:mm:ss").format(position.timestamp);
         print(hora);
 
         try {
@@ -306,26 +306,66 @@ class _RaceFormState extends State<RaceForm> {
       "date": data,
       "time": hora,
       "user_id": userId.toString(),
-      // "voucher_file": base64Imagew
+      // "voucher_file": base64Image
     };
 
-    print(jsonPost);
-
     try {
-      var response = await http.post(Uri.parse(kRacePost),
-          headers: {"Accept": "application/json", "Authorization": user.token!},
-          body: jsonPost);
-      Map jsonResponse = jsonDecode(response.body);
+      // Criar um request Multipart
+      var request = http.MultipartRequest('POST', Uri.parse(kRacePost));
 
-      if (jsonResponse["errors"] != null) {
-        throw "Erro ao enviar os dados!";
+      // Adicionar o arquivo ao campo 'file' da requisição
+      request.files.add(await http.MultipartFile.fromPath(
+        'file', // Nome do campo (deve coincidir com o esperado pelo servidor)
+        image.path, // Caminho para o arquivo
+      ));
+
+      // Adicionar outros campos se necessário
+      request.fields['odometer'] = kilo;
+      request.fields['latitude'] = lat;
+      request.fields['longitude'] = long;
+      request.fields['date'] = data;
+      request.fields['time'] = hora;
+      request.fields['user_id'] = userId.toString();
+      request.fields['branch_id'] = "77";
+      request.fields['file'] = image.path;
+
+      print("REQUEST: ${request.fields}");
+
+      // Enviar a requisição e aguardar a resposta
+      var response = await request.send();
+
+      // Convert the StreamedResponse to a Response
+      http.Response responseStream = await http.Response.fromStream(response);
+
+      Map jsonResponse = jsonDecode(responseStream.body);
+
+      if (response.statusCode == 200) {
+        print("OK");
+        return jsonResponse['message'];
+      } else {
+        print("Erro");
+        print(jsonResponse['errors']);
+        throw jsonResponse['errors'];
       }
-
-      print("json Response $jsonResponse");
-
-      return jsonResponse['message'];
     } catch (e) {
       return Future.error(e);
     }
+
+    // try {
+    //   var response = await http.post(Uri.parse(kRacePost),
+    //       headers: {"Accept": "application/json", "Authorization": user.token!},
+    //       body: jsonPost);
+    //   Map jsonResponse = jsonDecode(response.body);
+
+    //   if (jsonResponse["errors"] != null) {
+    //     throw "Erro ao enviar os dados!";
+    //   }
+
+    //   print("json Response $jsonResponse");
+
+    //   return jsonResponse['message'];
+    // } catch (e) {
+    //   return Future.error(e);
+    // }
   }
 }

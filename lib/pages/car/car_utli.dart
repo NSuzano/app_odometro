@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 class CarUtils {
   static Future<List<Car>> getCars(User user, int page) async {
     try {
-      var response = await http.get(Uri.parse("$kCarsGet?page=$page"), headers: {
+      var response = await http.get(Uri.parse("$kCars?page=$page"), headers: {
         "Accept": "application/json",
         "Authorization": user.token!
       });
@@ -25,6 +25,29 @@ class CarUtils {
         return cars;
       } else {
         throw jsonResponse;
+      }
+    } catch (e) {
+      return Future.error(e);
+    }
+  }
+
+  static Future<String> postCars(Map json, User user) async {
+    try {
+      // var jsonSend = jsonEncode(json);
+      var response = await http.post(Uri.parse(kCars),
+          headers: {"Accept": "application/json", "Authorization": user.token!},
+          body: json);
+
+      Map jsonResponse = jsonDecode(response.body);
+
+      print(response.statusCode);
+
+      if (response.statusCode == 201) {
+        return jsonResponse["type"];
+      } else {
+        print("Erro: ${response.body}");
+
+        throw jsonResponse["errors"];
       }
     } catch (e) {
       return Future.error(e);
