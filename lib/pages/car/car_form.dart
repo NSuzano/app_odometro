@@ -1,10 +1,8 @@
 import 'package:app_odometro/constraint/constraint.dart';
 import 'package:app_odometro/models/user.dart';
 import 'package:app_odometro/pages/car/car_utli.dart';
-import 'package:app_odometro/pages/race/util_race.dart';
 import 'package:app_odometro/util/loading_dialog.dart';
 import 'package:app_odometro/util/providers/car_provider.dart';
-import 'package:app_odometro/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -100,72 +98,6 @@ class _CarFormState extends State<CarForm> {
             ),
           const SizedBox(height: 16),
           _buildSubmitButton(context, user, carProvider),
-
-          // SizedBox(
-          //   height: 60,
-          //   width: double.infinity,
-          //   child: ElevatedButton(
-          //     style: ElevatedButton.styleFrom(
-          //         backgroundColor: kDefaultColors,
-          //         foregroundColor: Colors.white),
-          //     onPressed: () async {
-          //       if (_selectedOption == null) {
-          //         setState(() {
-          //           _isDropdownError = true; // Set error state for dropdown
-          //         });
-          //       } else {
-          //         setState(() {
-          //           _isDropdownError = false; // Set error state for dropdown
-          //         });
-          //       }
-          //       if (_formKey.currentState!.validate() &&
-          //           _selectedOption != null) {
-          //         print("Form is valid");
-          //         showDialog(
-          //           context: context,
-          //           builder: (context) {
-          //             return const LoadingDialog();
-          //           },
-          //         );
-          //         String owner =
-          //             _selectedOption == "Particular" ? "driver" : "company";
-
-          //         Map<String, dynamic> jsonSend = {
-          //           "plate": _plateController.text,
-          //           "brand": _brandController.text,
-          //           "model": _modelController.text,
-          //           "owner": owner,
-          //           "user_id": user.id.toString(),
-          //           "branch_id": "77"
-          //         };
-
-          //         try {
-          //           String result = await CarUtils.postCars(jsonSend, user);
-
-          //           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          //             content: Text('Carro Adicionado Com Sucesso'),
-          //             backgroundColor: Colors.green,
-          //           ));
-          //           Navigator.pop(context);
-          //         } catch (e) {
-          //           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          //             content: Text('$e'),
-          //             backgroundColor: Colors.red,
-          //           ));
-          //         } finally {
-          //           carProvider.clearCars();
-          //           carProvider.fetchCars(user, 1);
-
-          //           Navigator.pop(context);
-          //         }
-          //       }
-          //     },
-          //     child: const Text(
-          //       'Enviar',
-          //       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );
