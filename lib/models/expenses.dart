@@ -70,7 +70,7 @@ class Expenses {
     userId = json['user_id'] ?? "";
     createdAt = json['created_at'];
     updatedAt = json['updated_ at'];
-    user = json['user'] != null ? User.fromJsoExpanses(json['user']) : null;
+    user = json['user'] != null ? User.fromJsonAlt(json['user']) : null;
     category = json['category'] != null
         ? Categories.fromJsonExpanses(json['category'])
         : null;
