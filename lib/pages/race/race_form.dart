@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:app_odometro/pages/race/race_card.dart';
@@ -107,7 +106,7 @@ class _RaceFormState extends State<RaceForm> {
                           reverse: true,
                           itemBuilder: (context, index) {
                             Race? race;
-                            race = races[races.length - 1];
+                            race = races[0];
 
                             print(races.length);
 
@@ -252,10 +251,7 @@ class _RaceFormState extends State<RaceForm> {
 
         String data =
             "${position.timestamp.year}-${position.timestamp.month}-${position.timestamp.day}";
-        print(data);
-        print(position.timestamp);
         String hora = DateFormat("hh:mm:ss").format(position.timestamp);
-        print(hora);
 
         try {
           String response = await postRace(
@@ -267,28 +263,25 @@ class _RaceFormState extends State<RaceForm> {
               user.id!,
               _capturedImage);
 
-          races = [];
+          print("$response");
+
           controller.clear();
           _capturedImage = null;
+          Navigator.pop(context); // Close the loading dialog
 
-          // List<Race> listRaces = await RaceUtils.getRaces(user);
-          raceProvider.fetchRaces(user);
-          for (Race race in raceProvider.races) {
-            log(race.kms.toString());
-          }
-
-          setState(() {
-            races = raceProvider.races;
-          });
-
-          ReusableSnackbar.showSnackbar(context, response, Colors.greenAccent);
+          ReusableSnackbar.showSnackbar(context, response, Colors.green);
         } catch (e) {
           ReusableSnackbar.showSnackbar(
               context, e.toString(), Colors.redAccent);
         } finally {
+          raceProvider.clearRaces();
+          // print(user.name);
+          // return;
+
+          await raceProvider.fetchRaces(user, 1);
           Navigator.pop(context); // Close the loading dialog
 
-          Navigator.pop(context); // Close the loading dialog
+          // Get.offAllNamed("home", arguments: {"user": user});
         }
       }
     }
@@ -296,18 +289,18 @@ class _RaceFormState extends State<RaceForm> {
 
   Future<String> postRace(String kilo, String lat, String long, String hora,
       String data, int userId, File? image) async {
-    List<int> imageBytes = image!.readAsBytesSync();
-    String base64Image = base64Encode(imageBytes);
+    // List<int> imageBytes = image!.readAsBytesSync();
+    // String base64Image = base64Encode(imageBytes);
 
-    Map jsonPost = {
-      "odometer": kilo,
-      "latitude": lat,
-      "longitude": long,
-      "date": data,
-      "time": hora,
-      "user_id": userId.toString(),
-      // "voucher_file": base64Image
-    };
+    // Map jsonPost = {
+    //   "odometer": kilo,
+    //   "latitude": lat,
+    //   "longitude": long,
+    //   "date": data,
+    //   "time": hora,
+    //   "user_id": userId.toString(),
+    //   // "voucher_file": base64Image
+    // };
 
     try {
       // Criar um request Multipart
@@ -316,8 +309,13 @@ class _RaceFormState extends State<RaceForm> {
       // Adicionar o arquivo ao campo 'file' da requisição
       request.files.add(await http.MultipartFile.fromPath(
         'file', // Nome do campo (deve coincidir com o esperado pelo servidor)
-        image.path, // Caminho para o arquivo
+        image!.path, // Caminho para o arquivo
       ));
+
+      request.headers.addAll({
+        "Content-Type": "multipart/form-data",
+        "Authorization": user.token!
+      });
 
       // Adicionar outros campos se necessário
       request.fields['odometer'] = kilo;
@@ -339,7 +337,7 @@ class _RaceFormState extends State<RaceForm> {
 
       Map jsonResponse = jsonDecode(responseStream.body);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         print("OK");
         return jsonResponse['message'];
       } else {
@@ -350,22 +348,5 @@ class _RaceFormState extends State<RaceForm> {
     } catch (e) {
       return Future.error(e);
     }
-
-    // try {
-    //   var response = await http.post(Uri.parse(kRacePost),
-    //       headers: {"Accept": "application/json", "Authorization": user.token!},
-    //       body: jsonPost);
-    //   Map jsonResponse = jsonDecode(response.body);
-
-    //   if (jsonResponse["errors"] != null) {
-    //     throw "Erro ao enviar os dados!";
-    //   }
-
-    //   print("json Response $jsonResponse");
-
-    //   return jsonResponse['message'];
-    // } catch (e) {
-    //   return Future.error(e);
-    // }
   }
 }

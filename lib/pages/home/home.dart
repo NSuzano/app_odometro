@@ -1,5 +1,5 @@
-import 'package:app_odometro/pages/car/car_page.dart';
 import 'package:app_odometro/util/card_home.dart';
+import 'package:app_odometro/util/loading_dialog.dart';
 import 'package:app_odometro/util/providers/car_provider.dart';
 import 'package:app_odometro/util/providers/expenses_provider.dart';
 import 'package:app_odometro/util/providers/races_provider.dart';
@@ -161,9 +161,15 @@ class _HomeState extends State<Home> {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        // List<Race> races = await RaceUtils.getRaces(user);
-                        await raceProvider.fetchRaces(user);
-
+                        raceProvider.clearRaces();
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return const LoadingDialog();
+                          },
+                        );
+                        await raceProvider.fetchRaces(user, 1);
+                        Navigator.pop(context);
                         Get.toNamed('list-race', arguments: {"user": user});
                       },
                       child: const CardHome(
@@ -173,8 +179,14 @@ class _HomeState extends State<Home> {
                     GestureDetector(
                       onTap: () async {
                         expenseProvider.clearExpenses();
-
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return const LoadingDialog();
+                          },
+                        );
                         await expenseProvider.fetchExpenses(user, 1);
+                        Navigator.pop(context);
                         Get.toNamed('expensives_list',
                             arguments: {"user": user});
                       },
@@ -206,9 +218,6 @@ class _HomeState extends State<Home> {
             if (_areButtonsVisible)
               _buildFloatingActionButton(
                   "Cadastrar Carro", Icons.car_rental, "car", carProvider),
-            if (_areButtonsVisible)
-              _buildFloatingActionButton("Cadastrar Categoria", Icons.category,
-                  "category", carProvider),
             _buildMainFloatingActionButton(),
           ],
         ),
@@ -226,15 +235,23 @@ class _HomeState extends State<Home> {
         heroTag: heroTag, // Adiciona uma tag única para cada botão
 
         backgroundColor: kDefaultColors,
-        onPressed: () {
+        onPressed: () async {
+          _areButtonsVisible = false;
           // Implementar o que cada botão deve fazer
           print("$title pressed");
 
           if (title == "Cadastrar Carro") {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return const LoadingDialog();
+              },
+            );
             carProvider.clearCars();
 
-            carProvider.fetchCars(user, 1);
+            await carProvider.fetchCars(user, 1);
 
+            Navigator.pop(context);
             Get.toNamed('car-page');
           }
         },

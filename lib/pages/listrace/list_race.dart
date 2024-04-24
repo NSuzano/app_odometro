@@ -8,8 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-import '../race/util_race.dart';
-
 class ListRace extends StatefulWidget {
   const ListRace({super.key});
 
@@ -20,6 +18,25 @@ class ListRace extends StatefulWidget {
 class _ListRaceState extends State<ListRace> {
   late User user;
   List<Race> races = [];
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      final raceProvider = Provider.of<RaceProvider>(context, listen: false);
+      if (raceProvider.hasMore) {
+        raceProvider.fetchRaces(user, raceProvider.currentPage);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,19 +79,38 @@ class _ListRaceState extends State<ListRace> {
                 height: 10,
               ),
               const LabelRace(),
+              const SizedBox(
+                height: 20,
+              ),
               races.isNotEmpty
                   ? Flexible(
                       child: ListView.builder(
-                          itemCount: races.length,
+                          controller: _scrollController,
+                          itemCount: raceProvider.races.length +
+                              (raceProvider.hasMore ? 1 : 0),
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
                             Race? race;
-                            race = races[index];
 
-                            print(index);
-                            return RaceCard(
-                              race: race,
-                            );
+                            if (index < raceProvider.races.length) {
+                              race = races[index];
+
+                              print(index);
+                              return RaceCard(
+                                race: race,
+                              );
+                            } else {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 32),
+                                child: Center(
+                                    child: raceProvider.hasMore
+                                        ? const CircularProgressIndicator(
+                                            color: kDefaultColors,
+                                          )
+                                        : const Text("")),
+                              );
+                            }
                           }))
                   : const SizedBox(
                       height: 600,
@@ -91,9 +127,7 @@ class _ListRaceState extends State<ListRace> {
           backgroundColor: kDefaultColors,
           foregroundColor: kDefaultColorWhite,
           onPressed: () async {
-            List<Race> races = await RaceUtils.getRaces(user);
-
-            Get.toNamed('race', arguments: {"user": user, "races": races});
+            Get.toNamed('race', arguments: {"user": user});
           },
           icon: const Icon(Icons.add),
           label: const Text("Nova corrida"),

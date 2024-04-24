@@ -7,16 +7,20 @@ import '../../constraint/constraint.dart';
 import '../../models/race.dart';
 
 class RaceUtils {
-  static Future<List<Race>> getRaces(User user) async {
+  static Future<List<Race>> getRaces(User user, int page) async {
+    String id = user.id.toString();
     try {
-      var response = await http.get(Uri.parse(kRaceGet),
-          headers: {"Accept": "application/json", "Authorization": user.token!});
+      var response = await http
+          .get(Uri.parse("$kRaceGet?user_id=$id&page=$page"), headers: {
+        "Accept": "application/json",
+        "Authorization": user.token!
+      });
       Map jsonResponse = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
         // Assuming the API response contains a 'data' field which is a list of races
         List<dynamic> raceData = jsonResponse['data'];
-        print("RACE DATA: $raceData");
+        // print("RACE DATA: $raceData");
 
         // Convert the 'raceData' list into a list of Race objects
         List<Race> races = raceData.map((data) => Race.fromJson(data)).toList();
