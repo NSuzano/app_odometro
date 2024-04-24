@@ -44,7 +44,7 @@ class Car {
     createdAt = DateTime.parse(json['created_at']);
     updatedAt = DateTime.parse(json['updated_at']);
     branch = json['branch'] != null ? Branch.fromJson(json['branch']) : null;
-    user = json['user'] != null ? User.fromJsoExpanses(json['user']) : null;
+    user = json['user'] != null ? User.fromJsonAlt(json['user']) : null;
   }
 
   Map<String, dynamic> toJson() {

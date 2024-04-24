@@ -1,9 +1,11 @@
+import 'package:app_odometro/models/driver.dart';
 import 'package:app_odometro/util/card_home.dart';
 import 'package:app_odometro/util/loading_dialog.dart';
 import 'package:app_odometro/util/providers/car_provider.dart';
 import 'package:app_odometro/util/providers/expenses_provider.dart';
 import 'package:app_odometro/util/providers/races_provider.dart';
 import 'package:app_odometro/util/providers/user_provider.dart';
+import 'package:app_odometro/util/util_drivers_info.dart';
 import 'package:app_odometro/widgets/show_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -168,9 +170,10 @@ class _HomeState extends State<Home> {
                             return const LoadingDialog();
                           },
                         );
+                        Driver driverInfo = await DriversInfoUtil.getDriver(user);
                         await raceProvider.fetchRaces(user, 1);
                         Navigator.pop(context);
-                        Get.toNamed('list-race', arguments: {"user": user});
+                        Get.toNamed('list-race', arguments: {"user": user, "driver": driverInfo});
                       },
                       child: const CardHome(
                           image: "assets/icons/odometro.png",

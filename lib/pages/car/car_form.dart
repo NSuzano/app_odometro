@@ -1,4 +1,5 @@
 import 'package:app_odometro/constraint/constraint.dart';
+import 'package:app_odometro/models/driver.dart';
 import 'package:app_odometro/models/user.dart';
 import 'package:app_odometro/pages/car/car_utli.dart';
 import 'package:app_odometro/util/loading_dialog.dart';
@@ -22,8 +23,8 @@ class _CarFormState extends State<CarForm> {
   String? _selectedOption;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isDropdownError = false; // State to track if dropdown validation failed
-  final data = Get.arguments;
-
+  late User user;
+  late Driver driver;
   @override
   void dispose() {
     _plateController.dispose();
@@ -34,7 +35,10 @@ class _CarFormState extends State<CarForm> {
 
   @override
   Widget build(BuildContext context) {
-    User user = data['user'];
+    final data = Get.arguments;
+
+    user = data['user'];
+    // driver = data['driver'];
     final carProvider = Provider.of<CarProvider>(context);
 
     return Scaffold(
@@ -184,7 +188,7 @@ class _CarFormState extends State<CarForm> {
       "model": _modelController.text,
       "owner": _selectedOption == "Particular" ? "driver" : "company",
       "user_id": user.id.toString(),
-      "branch_id": "77"
+      "branch_id": driver.branchId.toString()
     };
 
     try {

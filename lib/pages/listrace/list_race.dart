@@ -1,4 +1,5 @@
 import 'package:app_odometro/constraint/constraint.dart';
+import 'package:app_odometro/models/driver.dart';
 import 'package:app_odometro/models/race.dart';
 import 'package:app_odometro/models/user.dart';
 import 'package:app_odometro/pages/race/race_card.dart';
@@ -17,6 +18,7 @@ class ListRace extends StatefulWidget {
 
 class _ListRaceState extends State<ListRace> {
   late User user;
+  late Driver driver;
   List<Race> races = [];
   late ScrollController _scrollController;
 
@@ -44,6 +46,7 @@ class _ListRaceState extends State<ListRace> {
 
     final data = Get.arguments;
     user = data['user'];
+    driver = data['driver'];
     races = raceProvider.races;
 
     return Scaffold(
@@ -127,7 +130,7 @@ class _ListRaceState extends State<ListRace> {
           backgroundColor: kDefaultColors,
           foregroundColor: kDefaultColorWhite,
           onPressed: () async {
-            Get.toNamed('race', arguments: {"user": user});
+            Get.toNamed('race', arguments: {"user": user, "driver": driver});
           },
           icon: const Icon(Icons.add),
           label: const Text("Nova corrida"),

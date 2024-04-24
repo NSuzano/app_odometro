@@ -26,6 +26,8 @@ class _ExpansesFormsState extends State<ExpansesForms> {
       TextEditingController();
   File? _capturedImage;
   String? _selectedOption;
+  final data = Get.arguments;
+  late User user;
 
   void _onImageUploadPressed() {
     pickImage(source: ImageSource.camera).then((value) {
@@ -39,8 +41,7 @@ class _ExpansesFormsState extends State<ExpansesForms> {
 
   @override
   Widget build(BuildContext context) {
-    final data = Get.arguments;
-    User user = data['user'];
+    user = data['user'];
 
     return Scaffold(
       appBar: AppBar(
