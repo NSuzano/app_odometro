@@ -44,7 +44,7 @@ class User {
     updatedAt = json['updated_at'];
   }
 
-  User.fromJsoExpanses(Map<String, dynamic> json) {
+  User.fromJsonAlt(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     email = json['email'];
