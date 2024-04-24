@@ -1,5 +1,6 @@
 import 'package:app_odometro/constraint/constraint.dart';
 import 'package:app_odometro/models/user.dart';
+import 'package:app_odometro/pages/car/car_form.dart';
 import 'package:app_odometro/pages/car/car_page.dart';
 import 'package:app_odometro/pages/driver/driver_page.dart';
 import 'package:app_odometro/pages/expenses/expenses_form.dart';
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
         'survey-page': (context) => const SurveyPage(),
         'driver-page': (context) => const DriverPage(),
         'car-page': (context) => const CarPage(),
+        'car-form': (context) => const CarForm(),
       },
     );
   }
