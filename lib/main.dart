@@ -5,7 +5,7 @@ import 'package:app_odometro/pages/car/car_page.dart';
 import 'package:app_odometro/pages/driver/driver_page.dart';
 import 'package:app_odometro/pages/expenses/expenses_form.dart';
 import 'package:app_odometro/pages/expenses/expenses_page.dart';
-import 'package:app_odometro/pages/listrace/list_race.dart';
+import 'package:app_odometro/pages/race/list_race.dart';
 import 'package:app_odometro/pages/login/login.dart';
 import 'package:app_odometro/pages/race/race_form.dart';
 import 'package:app_odometro/pages/survey/survey_page.dart';

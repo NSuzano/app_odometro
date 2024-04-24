@@ -180,6 +180,7 @@ class _ExpansesFormsState extends State<ExpansesForms> {
                   ),
                   const SizedBox(height: 16),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text("Categoria: "),
                       DropdownButtonHideUnderline(
@@ -218,7 +219,7 @@ class _ExpansesFormsState extends State<ExpansesForms> {
                           // or navigate to the next screen.
                           print('Form is valid');
 
-                          String type = "expense";
+                          // String type = "expense";
                         }
                       },
                       child: const Text(
@@ -252,7 +253,7 @@ class _ExpansesFormsState extends State<ExpansesForms> {
           ),
           const SizedBox(width: 40),
           _capturedImage != null
-              ? Container(
+              ? SizedBox(
                   height: 120,
                   width: 120,
                   child: Image.file(

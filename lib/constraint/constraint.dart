@@ -12,3 +12,4 @@ const kRaceGet = "$kDefautUrl/reports/races";
 const kExpansesGet = "$kDefautUrl/transactions";
 const kCars = "$kDefautUrl/cars";
 const kGetDriversInfo = "$kDefautUrl/drivers/users";
+const kGetCategories = "$kDefautUrl/categories";

@@ -1,6 +1,6 @@
 import 'package:app_odometro/models/expenses.dart';
 import 'package:app_odometro/models/user.dart';
-import 'package:app_odometro/pages/expenses/util_expenses.dart';
+import 'package:app_odometro/pages/expenses/util/util_expenses.dart';
 import 'package:flutter/material.dart';
 
 class ExpenseProvider with ChangeNotifier {

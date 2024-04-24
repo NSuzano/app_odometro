@@ -1,6 +1,6 @@
 import 'package:app_odometro/models/car.dart';
 import 'package:app_odometro/models/user.dart';
-import 'package:app_odometro/pages/car/car_utli.dart';
+import 'package:app_odometro/pages/car/util/car_utli.dart';
 import 'package:flutter/material.dart';
 
 class CarProvider with ChangeNotifier {

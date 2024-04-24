@@ -145,6 +145,8 @@ class _ExpensesPageState extends State<ExpensesPage> {
                 backgroundColor: kDefaultColors,
                 foregroundColor: kDefaultColorWhite,
                 onPressed: () async {
+                  
+
                   Get.toNamed('expensives', arguments: {"user": user});
                 },
                 icon: const Icon(Icons.add),

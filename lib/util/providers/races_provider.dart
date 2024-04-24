@@ -1,5 +1,5 @@
 import 'package:app_odometro/models/user.dart';
-import 'package:app_odometro/pages/race/util_race.dart';
+import 'package:app_odometro/pages/race/util/util_race.dart';
 import 'package:flutter/material.dart';
 import 'package:app_odometro/models/race.dart';
 

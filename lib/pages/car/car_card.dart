@@ -1,5 +1,4 @@
 import 'package:app_odometro/models/car.dart';
-import 'package:app_odometro/util/formats/date_br.dart';
 import 'package:app_odometro/widgets/label_status.dart';
 import 'package:flutter/material.dart';
 
@@ -14,8 +13,6 @@ class CarCard extends StatelessWidget {
     String status = car.status == "active" ? "Ativo" : "Inativo";
     TextStyle styleDescription = const TextStyle(fontSize: 12, height: 2);
 
-    String criadoEm = formatDateTimeStamp(car.createdAt!);
-    String atualizadoEm = formatDateTimeStamp(car.updatedAt!);
     return Card(
       margin: const EdgeInsets.all(8.0),
       child: Padding(
