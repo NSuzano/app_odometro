@@ -5,11 +5,25 @@ import 'package:app_odometro/models/race.dart';
 
 class RaceProvider with ChangeNotifier {
   List<Race> _races = [];
+  int _currentPage = 1;
+  bool _hasMore = true;
 
   List<Race> get races => _races;
+  bool get hasMore => _hasMore;
+  int get currentPage => _currentPage;
 
-  Future fetchRaces(User user) async {
-    _races = await RaceUtils.getRaces(user);
+  Future fetchRaces(User user, int page) async {
+    List<Race> listRaces = await RaceUtils.getRaces(user, page);
+    if (listRaces.length < 10) {
+      _hasMore = false;
+    }
+    _races.addAll(listRaces);
+
+    print("RACES: $races -  Length - ${races.length}");
+    _currentPage++;
+
+    print("HAS MORE : $_hasMore");
+
     notifyListeners();
   }
 
@@ -25,6 +39,13 @@ class RaceProvider with ChangeNotifier {
 
   void setRaces(List<Race> newRaces) {
     _races = newRaces;
+    notifyListeners();
+  }
+
+  void clearRaces() {
+    _races.clear();
+    _currentPage = 1;
+    _hasMore = true;
     notifyListeners();
   }
 }
