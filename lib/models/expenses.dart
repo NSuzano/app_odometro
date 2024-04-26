@@ -1,5 +1,7 @@
 import 'package:app_odometro/models/categories.dart';
+import 'package:app_odometro/models/payment.dart';
 import 'package:app_odometro/models/user.dart';
+import 'package:flutter/foundation.dart';
 
 class Expenses {
   int? id;
@@ -17,13 +19,14 @@ class Expenses {
   int? branchId;
   int? groupTaxaId;
   int? categoryId;
-  String? centerOfCost;
+  Categories? centerOfCost;
   String? project;
   int? userId;
   DateTime? createdAt;
   DateTime? updatedAt;
   User? user;
   Categories? category;
+  Payment? payment;
 
   Expenses(
       {this.id,
@@ -47,7 +50,8 @@ class Expenses {
       this.createdAt,
       this.updatedAt,
       this.user,
-      this.category});
+      this.category,
+      this.payment});
 
   Expenses.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -65,7 +69,9 @@ class Expenses {
     branchId = json['branch_id'];
     groupTaxaId = json['group_taxa_id'];
     categoryId = json['category_id'];
-    centerOfCost = json['center_of_cost'] ?? "";
+    centerOfCost = json['center_of_cost'] != null
+        ? Categories.fromJsonAlt(json['center_of_cost'])
+        : null;
     project = json['project'] ?? "";
     userId = json['user_id'];
     createdAt = DateTime.parse(json['created_at']);
@@ -73,6 +79,9 @@ class Expenses {
     user = json['user'] != null ? User.fromJsonAlt(json['user']) : null;
     category = json['category'] != null
         ? Categories.fromJsonAlt(json['category'])
+        : null;
+    payment = json['payment_form'] != null
+        ? Payment.fromJsonAlt(json['payment_form'])
         : null;
   }
 

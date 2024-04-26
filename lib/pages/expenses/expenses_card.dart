@@ -15,7 +15,10 @@ class ExpensesCard extends StatelessWidget {
       margin: const EdgeInsets.all(8.0),
       child: Row(
         children: [
-          // Coluna para o ícone
+          const Padding(
+            padding: EdgeInsets.only(left: 8.0),
+            child: Icon(Icons.featured_play_list),
+          ),
           Container(
             width: 10,
             color: Colors.green,
@@ -49,10 +52,27 @@ class ExpensesCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                AutoSizeText(
+                  "Código da Dispesa: ${expenses.externalCode!}",
+                  style: const TextStyle(
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                AutoSizeText(
+                  "Pagamento: ${expenses.payment!.name}",
+                  style: const TextStyle(
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 const SizedBox(
                   height: 10,
                 ),
-                Text(data)
+                Text(
+                  data,
+                  style: const TextStyle(fontSize: 12),
+                )
               ],
             ),
           ))

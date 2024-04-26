@@ -39,6 +39,12 @@ class Payment {
         json['account'] != null ? Account.fromJson(json['account']) : null;
   }
 
+  Payment.fromJsonAlt(Map<String, dynamic> json) {
+    id = json['id'];
+    code = json['code'];
+    name = json['name'];
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;

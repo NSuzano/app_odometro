@@ -16,12 +16,13 @@ class CarForm extends StatefulWidget {
 }
 
 class _CarFormState extends State<CarForm> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _plateController = TextEditingController();
   final TextEditingController _brandController = TextEditingController();
   final TextEditingController _modelController = TextEditingController();
   // final TextEditingController _owner = TextEditingController();
   String? _selectedOption;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   bool _isDropdownError = false; // State to track if dropdown validation failed
   late User user;
   late Driver driver;
