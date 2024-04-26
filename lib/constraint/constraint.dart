@@ -13,3 +13,4 @@ const kExpanses = "$kDefautUrl/transactions";
 const kCars = "$kDefautUrl/cars";
 const kGetDriversInfo = "$kDefautUrl/drivers/users";
 const kGetCategories = "$kDefautUrl/categories";
+const kGetPayments = "$kDefautUrl/payments";
