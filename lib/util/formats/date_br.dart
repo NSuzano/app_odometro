@@ -10,14 +10,14 @@ String convertIsoDateToBrazilian(String isoDate) {
   return '${parts[2]}/${parts[1]}/${parts[0]}';
 }
 
-
 String formatDate(String dateStr) {
   // A entrada é assumida como '2024-03-20 23:59:00'
   List<String> parts = dateStr.split(' '); // Divide em data e hora
-  List<String> dateParts = parts[0].split('-'); // Divide a data em [ano, mês, dia]
+  List<String> dateParts =
+      parts[0].split('-'); // Divide a data em [ano, mês, dia]
 
   // Reordena para DD/MM/YYYY e reanexa a hora
-  return '${dateParts[2]}/${dateParts[1]}/${dateParts[0]} ${parts[1]}';
+  return 'Data: ${dateParts[2]}/${dateParts[1]}/${dateParts[0]} Hora: ${parts[1]}';
 }
 
 String formatDateTimeStamp(DateTime timestamp) {

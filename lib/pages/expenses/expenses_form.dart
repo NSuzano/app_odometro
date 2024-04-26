@@ -2,15 +2,20 @@ import 'dart:io';
 
 import 'package:app_odometro/models/categories.dart';
 import 'package:app_odometro/models/driver.dart';
+import 'package:app_odometro/models/payment.dart';
 import 'package:app_odometro/pages/expenses/util/util_expenses.dart';
 import 'package:app_odometro/util/geolocator_util.dart';
 import 'package:app_odometro/util/loading_dialog.dart';
+import 'package:app_odometro/util/providers/car_provider.dart';
+import 'package:app_odometro/util/providers/expenses_provider.dart';
+import 'package:app_odometro/util/snackbar.dart';
 import 'package:app_odometro/widgets/select_dropdown.dart';
 import 'package:app_odometro/widgets/text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 import '../../constraint/constraint.dart';
 import '../../models/user.dart';
@@ -29,19 +34,24 @@ class _ExpansesFormsState extends State<ExpansesForms> {
       TextEditingController();
   final TextEditingController _codigoNotaController = TextEditingController();
   final TextEditingController _valorNotaController = TextEditingController();
-  final TextEditingController _tipoPagamentoController =
-      TextEditingController();
+
   File? _capturedImage;
   String? _selectedOption;
-  final data = Get.arguments;
+  String? _selectedGasOption;
+  String? _selectedOptionPayment;
+
   late User user;
   late Driver driver;
   late List<Categories> categoriesList;
   late List<Categories> categoriesListGas;
+  late List<Payment> paymentList;
+
   bool _isFirstDropdownError = false;
   bool _isSecondDropdownError = false;
+  bool _isPaymentDropdownError = false;
   bool _isSelectedGas = false;
-  String? _selectedGasOption;
+
+  final data = Get.arguments;
 
   void _onImageUploadPressed() {
     pickImage(source: ImageSource.camera).then((value) {
@@ -59,8 +69,11 @@ class _ExpansesFormsState extends State<ExpansesForms> {
     categoriesList = data['categories-list'];
     categoriesListGas = data['categories-gas'];
     driver = data['driver'];
+    paymentList = data['payment-list'];
+    final expenseProvider = Provider.of<ExpenseProvider>(context);
+
     TextStyle style =
-        TextStyle(fontSize: 12, color: Color.fromARGB(255, 175, 47, 37));
+        const TextStyle(fontSize: 12, color: Color.fromARGB(255, 175, 47, 37));
 
     return Scaffold(
       appBar: AppBar(
@@ -87,9 +100,6 @@ class _ExpansesFormsState extends State<ExpansesForms> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
                   const Text(
                     "Formulário de despesas",
                     style: TextStyle(
@@ -139,16 +149,52 @@ class _ExpansesFormsState extends State<ExpansesForms> {
                         return null;
                       }),
                   const SizedBox(height: 16),
-                  TextFormFieldStyled(
-                      label: "Tipo de pagamento",
-                      controller: _tipoPagamentoController,
-                      icon: Icons.payment,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor, digite o tipo de pagamento';
-                        }
-                        return null;
-                      }),
+                  Column(
+                    children: [
+                      const Row(
+                        children: [
+                          SizedBox(
+                            width: 12,
+                          ),
+                          Text(
+                            "Tipo da Pagamento: ",
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                      SelectDrop(
+                          categories: paymentList,
+                          hint: "Selecione o Tipo",
+                          selectedValue: _selectedOptionPayment,
+                          hasError: _isFirstDropdownError,
+                          onChangedValue: (newValue) {
+                            setState(() {
+                              _selectedOptionPayment = newValue;
+                              _isPaymentDropdownError = false;
+                            });
+                          }),
+                      if (_isPaymentDropdownError)
+                        Row(
+                          children: [
+                            const SizedBox(
+                              width: 12,
+                            ),
+                            Text("Por favor, selecione o tipo de pagamento",
+                                style: style),
+                          ],
+                        ),
+                    ],
+                  ),
+                  // TextFormFieldStyled(
+                  //     label: "Tipo de pagamento",
+                  //     controller: _tipoPagamentoController,
+                  //     icon: Icons.payment,
+                  //     validator: (value) {
+                  //       if (value == null || value.isEmpty) {
+                  //         return 'Por favor, digite o tipo de pagamento';
+                  //       }
+                  //       return null;
+                  //     }),
                   const SizedBox(height: 16),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -238,14 +284,21 @@ class _ExpansesFormsState extends State<ExpansesForms> {
                           foregroundColor: Colors.white),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          if (_selectedOption == null) {
-                            print("TESTE1");
+                          if (_selectedOptionPayment == null) {
+                            print("Não selecionado pagamento");
+                            setState(() {
+                              _isPaymentDropdownError = true;
+                            });
+                          } else if (_selectedOption == null) {
+                            print("Não selecionado Categoria");
+
                             setState(() {
                               _isFirstDropdownError = true;
                             });
                           } else if (_selectedGasOption == null &&
                               _selectedOption == "1") {
-                            print("TESTE2");
+                            print("Não selecionado Combustivel");
+
                             setState(() {
                               _isSecondDropdownError = true;
                             });
@@ -261,7 +314,7 @@ class _ExpansesFormsState extends State<ExpansesForms> {
                             );
                           } else {
                             print("OK");
-                            // _sendItems();
+                            _sendItems(expenseProvider);
                           }
                         }
                       },
@@ -314,7 +367,7 @@ class _ExpansesFormsState extends State<ExpansesForms> {
     );
   }
 
-  Future<void> _sendItems() async {
+  Future<void> _sendItems(ExpenseProvider expenseProvider) async {
     print("TESTE");
     showDialog(
       context: context,
@@ -333,18 +386,26 @@ class _ExpansesFormsState extends State<ExpansesForms> {
       "type": "expense",
       "category_id": _selectedOption,
       "branch_id": driver.branchId.toString(),
-      "group_taxa_id": "",
-      "user_id": user.id,
+      // "group_taxa_id": "80",
+      "user_id": user.id.toString(),
       "gross_amount": _valorNotaController.text,
       "due_date": data,
-      "payment_id": "",
+      "payment_id": _selectedOptionPayment,
       "external_code": _codigoNotaController.text,
     };
 
+    print("Json Send: $jsonSend");
+
     try {
-      ExpensesUtil.postExpenses(jsonSend, user);
+      String response = await ExpensesUtil.postExpenses(jsonSend, user);
+      ReusableSnackbar.showSnackbar(context, response, Colors.green);
+      expenseProvider.clearExpenses();
+      await expenseProvider.fetchExpenses(user, 1);
+      Navigator.pop(context); // Close the loading dialog
+      Navigator.pop(context); // Close the page
     } catch (e) {
       Navigator.pop(context); // Close the loading dialog
+
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('$e'), backgroundColor: Colors.red));
     }

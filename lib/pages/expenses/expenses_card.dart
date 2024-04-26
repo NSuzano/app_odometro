@@ -10,7 +10,7 @@ class ExpensesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String data = formatDate(expenses.dueDate!);
+    String data = formatDateTimeStamp(expenses.createdAt!);
     return Card(
       margin: const EdgeInsets.all(8.0),
       child: Row(
@@ -30,7 +30,7 @@ class ExpensesCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     AutoSizeText(
-                      data,
+                      expenses.category!.name!,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
@@ -52,7 +52,7 @@ class ExpensesCard extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                Text(expenses.category!.name!)
+                Text(data)
               ],
             ),
           ))

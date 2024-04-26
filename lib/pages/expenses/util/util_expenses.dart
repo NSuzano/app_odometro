@@ -39,7 +39,7 @@ class ExpensesUtil {
     }
   }
 
-  static Future<List<Expenses>> postExpenses(Map json, User user) async {
+  static Future<String> postExpenses(Map json, User user) async {
     try {
       var response = await http.post(Uri.parse(kExpanses),
           headers: {"Accept": "application/json", "Authorization": user.token!},
@@ -49,7 +49,8 @@ class ExpensesUtil {
 
       print(response.statusCode);
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
+        print("Dispesa Criada");
         return jsonResponse["message"];
       } else {
         print("Erro: ${response.body}");

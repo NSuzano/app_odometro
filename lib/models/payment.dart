@@ -55,13 +55,12 @@ class Payment {
     return data;
   }
 
-  static Future<List<Payment>> getPayments(User user, int page) async {
+  static Future<List<Payment>> getPayments(User user) async {
     try {
-      var response = await http.get(Uri.parse("$kGetPayments?page=$page"),
-          headers: {
-            "Accept": "application/json",
-            "Authorization": user.token!
-          });
+      var response = await http.get(Uri.parse(kGetPayments), headers: {
+        "Accept": "application/json",
+        "Authorization": user.token!
+      });
       Map jsonResponse = jsonDecode(response.body);
 
       if (response.statusCode == 200) {

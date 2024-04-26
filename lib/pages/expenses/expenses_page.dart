@@ -2,6 +2,7 @@ import 'package:app_odometro/constraint/constraint.dart';
 import 'package:app_odometro/models/categories.dart';
 import 'package:app_odometro/models/driver.dart';
 import 'package:app_odometro/models/expenses.dart';
+import 'package:app_odometro/models/payment.dart';
 import 'package:app_odometro/models/user.dart';
 import 'package:app_odometro/pages/expenses/expenses_card.dart';
 import 'package:app_odometro/util/providers/expenses_provider.dart';
@@ -27,6 +28,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
   final data = Get.arguments;
 
   late Driver driver;
+  late List<Payment> paymentList;
   @override
   void initState() {
     super.initState();
@@ -78,6 +80,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
     user = data['user'];
     expenses = expenseProvider.expenses;
     driver = data['driver'];
+    paymentList = data['payment-list'];
 
     return Scaffold(
         appBar: AppBar(
@@ -158,12 +161,15 @@ class _ExpensesPageState extends State<ExpensesPage> {
                         user, "center_of_cost");
                     listCategoriesGas =
                         await CategoriesUtil.getCategories(user, "category");
+                    // listCategoriesGroupTax =
+                    //     await CategoriesUtil.getCategories(user, "group_taxa");
 
                     Get.toNamed('expensives', arguments: {
                       "user": user,
                       "categories-list": listCategories,
                       "categories-gas": listCategoriesGas,
-                      "driver": driver
+                      "driver": driver,
+                      "payment-list": paymentList
                     });
                   } catch (e) {
                     ReusableSnackbar.showSnackbar(context, "$e", Colors.red);

@@ -2,7 +2,7 @@ import 'package:app_odometro/models/categories.dart';
 import 'package:flutter/material.dart';
 
 class SelectDrop extends StatefulWidget {
-  final List<Categories> categories;
+  final List categories;
   final String hint;
   final String? selectedValue;
   final Function(String?) onChangedValue;

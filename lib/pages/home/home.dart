@@ -1,4 +1,5 @@
 import 'package:app_odometro/models/driver.dart';
+import 'package:app_odometro/models/payment.dart';
 import 'package:app_odometro/util/card_home.dart';
 import 'package:app_odometro/util/loading_dialog.dart';
 import 'package:app_odometro/util/providers/car_provider.dart';
@@ -192,11 +193,15 @@ class _HomeState extends State<Home> {
                         );
                         Driver driverInfo =
                             await DriversInfoUtil.getDriver(user);
+                        List<Payment> payment = await Payment.getPayments(user);
 
                         await expenseProvider.fetchExpenses(user, 1);
                         Navigator.pop(context);
-                        Get.toNamed('expensives_list',
-                            arguments: {"user": user, "driver": driverInfo});
+                        Get.toNamed('expensives_list', arguments: {
+                          "user": user,
+                          "driver": driverInfo,
+                          "payment-list": payment
+                        });
                       },
                       child: const CardHome(
                           image: "assets/icons/honorarios.png",

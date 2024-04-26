@@ -20,8 +20,8 @@ class Expenses {
   String? centerOfCost;
   String? project;
   int? userId;
-  String? createdAt;
-  String? updatedAt;
+  DateTime? createdAt;
+  DateTime? updatedAt;
   User? user;
   Categories? category;
 
@@ -62,14 +62,14 @@ class Expenses {
     paymentDate = json['payment_date'] ?? "";
     cancellationDate = json['cancellation_date'] ?? "";
     clearanceDate = json['clearance_date'] ?? "";
-    branchId = json['branch_id'] ?? "";
-    groupTaxaId = json['group_taxa_id'] ?? "";
-    categoryId = json['category_id'] ?? "";
+    branchId = json['branch_id'];
+    groupTaxaId = json['group_taxa_id'];
+    categoryId = json['category_id'];
     centerOfCost = json['center_of_cost'] ?? "";
     project = json['project'] ?? "";
-    userId = json['user_id'] ?? "";
-    createdAt = json['created_at'];
-    updatedAt = json['updated_ at'];
+    userId = json['user_id'];
+    createdAt = DateTime.parse(json['created_at']);
+    updatedAt = DateTime.parse(json['updated_at']);
     user = json['user'] != null ? User.fromJsonAlt(json['user']) : null;
     category = json['category'] != null
         ? Categories.fromJsonAlt(json['category'])
