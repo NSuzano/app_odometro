@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:app_odometro/models/categories.dart';
+import 'package:app_odometro/models/driver.dart';
 import 'package:app_odometro/pages/race/race_card.dart';
 import 'package:app_odometro/util/providers/races_provider.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +34,10 @@ class _RaceFormState extends State<RaceForm> {
   File? _capturedImage;
   late User user;
   List<Race> races = [];
+  List<Categories> categoriesList = [];
+  late Driver driver;
+  String? _selectedOption;
+  final data = Get.arguments;
 
   @override
   void initState() {
@@ -43,8 +49,9 @@ class _RaceFormState extends State<RaceForm> {
   Widget build(BuildContext context) {
     final raceProvider = Provider.of<RaceProvider>(context);
 
-    final data = Get.arguments;
     user = data['user'];
+    categoriesList = data['categories-list'];
+    driver = data['driver'];
 
     races = raceProvider.races;
     return Scaffold(
@@ -78,6 +85,8 @@ class _RaceFormState extends State<RaceForm> {
                     _buildKilometragemField(),
                     const SizedBox(height: 20),
                     _buildImageUploadSection(),
+                    const SizedBox(height: 16),
+                    _buildDropDownSelect(),
                     const SizedBox(height: 30),
                     _buildSubmitButton(user, context, raceProvider),
                   ],
@@ -97,7 +106,7 @@ class _RaceFormState extends State<RaceForm> {
                     color: kDefaultColors,
                     fontSize: 20),
               ),
-              Container(
+              SizedBox(
                   height: 170,
                   child: races.isNotEmpty
                       ? ListView.builder(
@@ -107,8 +116,6 @@ class _RaceFormState extends State<RaceForm> {
                           itemBuilder: (context, index) {
                             Race? race;
                             race = races[0];
-
-                            print(races.length);
 
                             return RaceCard(
                               race: race,
@@ -179,7 +186,7 @@ class _RaceFormState extends State<RaceForm> {
           ),
           const SizedBox(width: 40),
           _capturedImage != null
-              ? Container(
+              ? SizedBox(
                   height: 120,
                   width: 120,
                   child: Image.file(
@@ -188,15 +195,43 @@ class _RaceFormState extends State<RaceForm> {
                     alignment: Alignment.center,
                   ),
                 )
-              : Container(
-                  child: const Text(
-                    "Sem foto",
-                    style: TextStyle(
-                        color: Colors.redAccent, fontWeight: FontWeight.bold),
-                  ),
+              : const Text(
+                  "Sem foto",
+                  style: TextStyle(
+                      color: Colors.redAccent, fontWeight: FontWeight.bold),
                 ),
         ],
       ),
+    );
+  }
+
+  Widget _buildDropDownSelect() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        // const Text("Categoria: "),
+        DropdownButtonHideUnderline(
+          child: DropdownButton<String>(
+            value:
+                _selectedOption, // Este deverá ser o id ou nome da categoria selecionada
+            hint: const Text("Selecione uma opção"),
+            items: categoriesList.map((Categories category) {
+              return DropdownMenuItem<String>(
+                value: category.id
+                    .toString(), // Assumindo que você quer usar o nome como valor
+                child:
+                    Text(category.name ?? ""), // Exibindo o nome da categoria
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
+              setState(() {
+                _selectedOption =
+                    newValue; // Atualizando o estado com a nova seleção
+              });
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -239,6 +274,14 @@ class _RaceFormState extends State<RaceForm> {
             backgroundColor: Colors.red,
           ),
         );
+      } else if (_selectedOption == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Selecione uma categoria antes de enviar.'),
+            duration: Duration(seconds: 2),
+            backgroundColor: Colors.red,
+          ),
+        );
       } else {
         showDialog(
           context: context,
@@ -263,24 +306,23 @@ class _RaceFormState extends State<RaceForm> {
               user.id!,
               _capturedImage);
 
-          print("$response");
-
           controller.clear();
           _capturedImage = null;
           Navigator.pop(context); // Close the loading dialog
 
           ReusableSnackbar.showSnackbar(context, response, Colors.green);
-        } catch (e) {
-          ReusableSnackbar.showSnackbar(
-              context, e.toString(), Colors.redAccent);
-        } finally {
           raceProvider.clearRaces();
           // print(user.name);
           // return;
 
           await raceProvider.fetchRaces(user, 1);
           Navigator.pop(context); // Close the loading dialog
+        } catch (e) {
+          Navigator.pop(context); // Close the loading dialog
 
+          ReusableSnackbar.showSnackbar(
+              context, e.toString(), Colors.redAccent);
+        } finally {
           // Get.offAllNamed("home", arguments: {"user": user});
         }
       }
@@ -324,10 +366,9 @@ class _RaceFormState extends State<RaceForm> {
       request.fields['date'] = data;
       request.fields['time'] = hora;
       request.fields['user_id'] = userId.toString();
-      request.fields['branch_id'] = "77";
+      request.fields['branch_id'] = driver.branchId.toString();
+      request.fields['category_id'] = _selectedOption!;
       request.fields['file'] = image.path;
-
-      print("REQUEST: ${request.fields}");
 
       // Enviar a requisição e aguardar a resposta
       var response = await request.send();
@@ -338,11 +379,8 @@ class _RaceFormState extends State<RaceForm> {
       Map jsonResponse = jsonDecode(responseStream.body);
 
       if (response.statusCode == 201) {
-        print("OK");
         return jsonResponse['message'];
       } else {
-        print("Erro");
-        print(jsonResponse['errors']);
         throw jsonResponse['errors'];
       }
     } catch (e) {

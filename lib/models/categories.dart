@@ -22,14 +22,14 @@ class Categories {
     id = json['id'];
     code = json['code'];
     name = json['name'];
-    description = json['description'];
+    description = json['description'] ?? "";
     status = json['status'];
     type = json['type'];
-    createdAt = DateTime.parse(json['created_at']);
-    updatedAt = DateTime.parse(json['updatedAt']);
+    // createdAt = DateTime.parse(json['created_at']);
+    // updatedAt = DateTime.parse(json['updatedAt']);
   }
 
-  Categories.fromJsonExpanses(Map<String, dynamic> json) {
+  Categories.fromJsonAlt(Map<String, dynamic> json) {
     id = json['id'];
     code = json['code'];
     name = json['name'];

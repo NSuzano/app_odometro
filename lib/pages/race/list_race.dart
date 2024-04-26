@@ -1,9 +1,12 @@
 import 'package:app_odometro/constraint/constraint.dart';
+import 'package:app_odometro/models/categories.dart';
 import 'package:app_odometro/models/driver.dart';
 import 'package:app_odometro/models/race.dart';
 import 'package:app_odometro/models/user.dart';
 import 'package:app_odometro/pages/race/race_card.dart';
 import 'package:app_odometro/util/providers/races_provider.dart';
+import 'package:app_odometro/util/snackbar.dart';
+import 'package:app_odometro/util/util_categories.dart';
 import 'package:app_odometro/widgets/label_races.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -130,7 +133,19 @@ class _ListRaceState extends State<ListRace> {
           backgroundColor: kDefaultColors,
           foregroundColor: kDefaultColorWhite,
           onPressed: () async {
-            Get.toNamed('race', arguments: {"user": user, "driver": driver});
+            List<Categories> listCategories = [];
+
+            try {
+              listCategories =
+                  await CategoriesUtil.getCategories(user, "route");
+              Get.toNamed('race', arguments: {
+                "user": user,
+                "driver": driver,
+                "categories-list": listCategories
+              });
+            } catch (e) {
+              ReusableSnackbar.showSnackbar(context, "$e", Colors.red);
+            }
           },
           icon: const Icon(Icons.add),
           label: const Text("Nova corrida"),

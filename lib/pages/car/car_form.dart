@@ -137,19 +137,36 @@ class _CarFormState extends State<CarForm> {
       children: [
         const Text("Propietário : "),
         const SizedBox(width: 10),
-        DropdownButtonHideUnderline(
-          child: DropdownButton<String>(
-            value: _selectedOption,
-            hint: const Text("Selecione uma opção"),
-            items: const ['Particular', 'Empresa'].map((String value) {
-              return DropdownMenuItem<String>(value: value, child: Text(value));
-            }).toList(),
-            onChanged: (newValue) {
-              setState(() {
-                _selectedOption = newValue;
-                _isDropdownError = false; // Reset error on new selection
-              });
-            },
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            border: Border.all(color: Colors.grey.shade300, width: 1),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.shade100,
+                spreadRadius: 1,
+                blurRadius: 1,
+                offset: const Offset(0, 2), // changes position of shadow
+              ),
+            ],
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              value: _selectedOption,
+              hint: const Text("Selecione uma opção"),
+              items: const ['Particular', 'Empresa'].map((String value) {
+                return DropdownMenuItem<String>(
+                    value: value, child: Text(value));
+              }).toList(),
+              onChanged: (newValue) {
+                setState(() {
+                  _selectedOption = newValue;
+                  _isDropdownError = false; // Reset error on new selection
+                });
+              },
+            ),
           ),
         ),
       ],

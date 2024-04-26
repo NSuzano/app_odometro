@@ -170,10 +170,12 @@ class _HomeState extends State<Home> {
                             return const LoadingDialog();
                           },
                         );
-                        Driver driverInfo = await DriversInfoUtil.getDriver(user);
+                        Driver driverInfo =
+                            await DriversInfoUtil.getDriver(user);
                         await raceProvider.fetchRaces(user, 1);
                         Navigator.pop(context);
-                        Get.toNamed('list-race', arguments: {"user": user, "driver": driverInfo});
+                        Get.toNamed('list-race',
+                            arguments: {"user": user, "driver": driverInfo});
                       },
                       child: const CardHome(
                           image: "assets/icons/odometro.png",
@@ -188,10 +190,13 @@ class _HomeState extends State<Home> {
                             return const LoadingDialog();
                           },
                         );
+                        Driver driverInfo =
+                            await DriversInfoUtil.getDriver(user);
+
                         await expenseProvider.fetchExpenses(user, 1);
                         Navigator.pop(context);
                         Get.toNamed('expensives_list',
-                            arguments: {"user": user});
+                            arguments: {"user": user, "driver": driverInfo});
                       },
                       child: const CardHome(
                           image: "assets/icons/honorarios.png",
