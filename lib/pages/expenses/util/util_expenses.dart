@@ -8,12 +8,15 @@ import 'package:http/http.dart' as http;
 class ExpensesUtil {
   static Future<List<Expenses>> getExpenses(User user, int page) async {
     print("PAGE: $page");
+
+    String id = user.id.toString();
     try {
-      var response = await http
-          .get(Uri.parse("$kExpansesGet?type=expense&page=$page"), headers: {
-        "Accept": "application/json",
-        "Authorization": user.token!
-      });
+      var response = await http.get(
+          Uri.parse("$kExpanses?type=expense&page=$page&user_id=$id"),
+          headers: {
+            "Accept": "application/json",
+            "Authorization": user.token!
+          });
       Map jsonResponse = jsonDecode(response.body);
 
       print(jsonResponse);
@@ -30,6 +33,28 @@ class ExpensesUtil {
         return expenses;
       } else {
         throw jsonResponse['message'];
+      }
+    } catch (e) {
+      return Future.error(e);
+    }
+  }
+
+  static Future<List<Expenses>> postExpenses(Map json, User user) async {
+    try {
+      var response = await http.post(Uri.parse(kExpanses),
+          headers: {"Accept": "application/json", "Authorization": user.token!},
+          body: json);
+
+      Map jsonResponse = jsonDecode(response.body);
+
+      print(response.statusCode);
+
+      if (response.statusCode == 201) {
+        return jsonResponse["message"];
+      } else {
+        print("Erro: ${response.body}");
+
+        throw jsonResponse["errors"];
       }
     } catch (e) {
       return Future.error(e);

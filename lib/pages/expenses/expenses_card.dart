@@ -52,7 +52,7 @@ class ExpensesCard extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                Text(expenses.transactionCode!)
+                Text(expenses.category!.name!)
               ],
             ),
           ))

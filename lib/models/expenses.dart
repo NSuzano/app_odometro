@@ -72,7 +72,7 @@ class Expenses {
     updatedAt = json['updated_ at'];
     user = json['user'] != null ? User.fromJsonAlt(json['user']) : null;
     category = json['category'] != null
-        ? Categories.fromJsonExpanses(json['category'])
+        ? Categories.fromJsonAlt(json['category'])
         : null;
   }
 

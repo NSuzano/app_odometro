@@ -1,8 +1,12 @@
 import 'package:app_odometro/constraint/constraint.dart';
+import 'package:app_odometro/models/categories.dart';
+import 'package:app_odometro/models/driver.dart';
 import 'package:app_odometro/models/expenses.dart';
 import 'package:app_odometro/models/user.dart';
 import 'package:app_odometro/pages/expenses/expenses_card.dart';
 import 'package:app_odometro/util/providers/expenses_provider.dart';
+import 'package:app_odometro/util/snackbar.dart';
+import 'package:app_odometro/util/util_categories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -20,7 +24,9 @@ class _ExpensesPageState extends State<ExpensesPage> {
   List<Expenses> expenses = [];
   late ScrollController _scrollController;
   bool _isButtonVisible = true;
+  final data = Get.arguments;
 
+  late Driver driver;
   @override
   void initState() {
     super.initState();
@@ -69,9 +75,9 @@ class _ExpensesPageState extends State<ExpensesPage> {
   Widget build(BuildContext context) {
     final expenseProvider = Provider.of<ExpenseProvider>(context);
 
-    final data = Get.arguments;
     user = data['user'];
     expenses = expenseProvider.expenses;
+    driver = data['driver'];
 
     return Scaffold(
         appBar: AppBar(
@@ -145,9 +151,23 @@ class _ExpensesPageState extends State<ExpensesPage> {
                 backgroundColor: kDefaultColors,
                 foregroundColor: kDefaultColorWhite,
                 onPressed: () async {
-                  
+                  List<Categories> listCategories = [];
+                  List<Categories> listCategoriesGas = [];
+                  try {
+                    listCategories = await CategoriesUtil.getCategories(
+                        user, "center_of_cost");
+                    listCategoriesGas =
+                        await CategoriesUtil.getCategories(user, "category");
 
-                  Get.toNamed('expensives', arguments: {"user": user});
+                    Get.toNamed('expensives', arguments: {
+                      "user": user,
+                      "categories-list": listCategories,
+                      "categories-gas": listCategoriesGas,
+                      "driver": driver
+                    });
+                  } catch (e) {
+                    ReusableSnackbar.showSnackbar(context, "$e", Colors.red);
+                  }
                 },
                 icon: const Icon(Icons.add),
                 label: const Text("Nova Dispesa"),
