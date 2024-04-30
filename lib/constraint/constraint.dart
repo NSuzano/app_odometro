@@ -14,3 +14,5 @@ const kCars = "$kDefautUrl/cars";
 const kGetDriversInfo = "$kDefautUrl/drivers/users";
 const kGetCategories = "$kDefautUrl/categories";
 const kGetPayments = "$kDefautUrl/payments";
+const kGetSurvey = "$kDefautUrl/inspections";
+const kUploadFiles = "$kDefautUrl/uploads";

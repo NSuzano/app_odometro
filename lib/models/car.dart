@@ -47,6 +47,16 @@ class Car {
     user = json['user'] != null ? User.fromJsonAlt(json['user']) : null;
   }
 
+  Car.fromJsonAlt(Map<String, dynamic> json) {
+    id = json['id'];
+    plate = json['plate'];
+    brand = json['brand'];
+    model = json['model'];
+    description = json['description'] ?? "";
+    status = json['status'];
+  }
+
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;

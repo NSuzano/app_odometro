@@ -384,9 +384,8 @@ class _ExpansesFormsState extends State<ExpansesForms> {
     final jsonSend = {
       "description": _descricaoNotaController.text,
       "type": "expense",
-      "category_id": _selectedOption,
+      "center_of_cost": _selectedOption,
       "branch_id": driver.branchId.toString(),
-      // "group_taxa_id": "80",
       "user_id": user.id.toString(),
       "gross_amount": _valorNotaController.text,
       "due_date": data,
@@ -394,10 +393,17 @@ class _ExpansesFormsState extends State<ExpansesForms> {
       "external_code": _codigoNotaController.text,
     };
 
+    _selectedGasOption != null
+        ? jsonSend["category_id"] = _selectedGasOption
+        : null;
+
     print("Json Send: $jsonSend");
 
     try {
-      String response = await ExpensesUtil.postExpenses(jsonSend, user);
+      String idResponse = await ExpensesUtil.postExpenses(jsonSend, user);
+
+      String response = await ExpensesUtil.postImageExpenses(user, _capturedImage!, idResponse);
+
       ReusableSnackbar.showSnackbar(context, response, Colors.green);
       expenseProvider.clearExpenses();
       await expenseProvider.fetchExpenses(user, 1);

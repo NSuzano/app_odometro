@@ -1,16 +1,14 @@
-import 'package:app_odometro/models/expenses.dart';
-import 'package:app_odometro/util/formats/date_br.dart';
+import 'package:app_odometro/models/survey.dart';
 import 'package:app_odometro/widgets/label_value.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
-class ExpensesCard extends StatelessWidget {
-  final Expenses expenses;
-  const ExpensesCard({super.key, required this.expenses});
+class SurveyCard extends StatelessWidget {
+  final Survey survey;
+  const SurveyCard({super.key, required this.survey});
 
   @override
   Widget build(BuildContext context) {
-    String data = formatDateTimeStamp(expenses.createdAt!);
     return Card(
       margin: const EdgeInsets.all(8.0),
       child: Row(
@@ -33,14 +31,12 @@ class ExpensesCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     AutoSizeText(
-                      expenses.category != null
-                          ? expenses.category!.name!
-                          : expenses.centerOfCost!.name!,
+                      survey.description != null ? survey.description! : "",
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    ValueLabel(value: expenses.grossAmount!)
+                    ValueLabel(value: "12")
                     // AutoSizeText(expenses.grossAmount!)
                   ],
                 ),
@@ -48,21 +44,14 @@ class ExpensesCard extends StatelessWidget {
                   thickness: 2,
                 ),
                 AutoSizeText(
-                  "Descrição: ${expenses.description!}",
+                  "Descrição: ${survey.description!}",
                   style: const TextStyle(
                     fontSize: 12.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 AutoSizeText(
-                  "Código da Dispesa: ${expenses.externalCode!}",
-                  style: const TextStyle(
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                AutoSizeText(
-                  "Pagamento: ${expenses.payment!.name}",
+                  "Endereço: ${survey.fullAddress!}",
                   style: const TextStyle(
                     fontSize: 12.0,
                     fontWeight: FontWeight.bold,
@@ -71,10 +60,6 @@ class ExpensesCard extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                Text(
-                  data,
-                  style: const TextStyle(fontSize: 12),
-                )
               ],
             ),
           ))
