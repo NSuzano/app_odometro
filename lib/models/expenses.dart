@@ -1,7 +1,6 @@
 import 'package:app_odometro/models/categories.dart';
 import 'package:app_odometro/models/payment.dart';
 import 'package:app_odometro/models/user.dart';
-import 'package:flutter/foundation.dart';
 
 class Expenses {
   int? id;

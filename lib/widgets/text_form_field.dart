@@ -1,3 +1,4 @@
+import 'package:app_odometro/constraint/constraint.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -39,7 +40,20 @@ class _TextFormFieldStyledState extends State<TextFormFieldStyled> {
         fillColor: Colors.white,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(
+              color: Colors.grey.shade300, width: 1), // Borda visível
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+              color: Colors.grey.shade300,
+              width: 1.5), // Borda quando o campo está não focado
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+              color: kDefaultColors,
+              width: 2), // Borda quando o campo está focado
         ),
       ),
       validator: widget.validator,

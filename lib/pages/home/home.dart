@@ -5,7 +5,6 @@ import 'package:app_odometro/util/loading_dialog.dart';
 import 'package:app_odometro/util/providers/car_provider.dart';
 import 'package:app_odometro/util/providers/expenses_provider.dart';
 import 'package:app_odometro/util/providers/races_provider.dart';
-import 'package:app_odometro/util/providers/survey_provider.dart';
 import 'package:app_odometro/util/providers/user_provider.dart';
 import 'package:app_odometro/util/snackbar.dart';
 import 'package:app_odometro/util/util_drivers_info.dart';
@@ -50,7 +49,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     final raceProvider = Provider.of<RaceProvider>(context);
     final expenseProvider = Provider.of<ExpenseProvider>(context);
-    final surveyProvider = Provider.of<SurveyProvider>(context);
+    // final surveyProvider = Provider.of<SurveyProvider>(context);
     final carProvider = Provider.of<CarProvider>(context);
     final user = Provider.of<UserProvider>(context).user;
     final userProvider = Provider.of<UserProvider>(context);
@@ -219,30 +218,30 @@ class _HomeState extends State<Home> {
                           image: "assets/icons/honorarios.png",
                           text: "Dispesas"),
                     ),
-                    GestureDetector(
-                      onTap: () async {
-                        surveyProvider.clearSurvey();
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return const LoadingDialog();
-                          },
-                        );
+                    // GestureDetector(
+                    //   onTap: () async {
+                    //     surveyProvider.clearSurvey();
+                    //     showDialog(
+                    //       context: context,
+                    //       builder: (context) {
+                    //         return const LoadingDialog();
+                    //       },
+                    //     );
 
-                        try {
-                          await surveyProvider.fetchSurvey(user, 1);
-                          Get.toNamed('survey-page', arguments: {"user": user});
-                        } catch (e) {
-                          Navigator.pop(context); // Close the loading dialog
+                    //     try {
+                    //       await surveyProvider.fetchSurvey(user, 1);
+                    //       Get.toNamed('survey-page', arguments: {"user": user});
+                    //     } catch (e) {
+                    //       Navigator.pop(context); // Close the loading dialog
 
-                          ReusableSnackbar.showSnackbar(
-                              context, e.toString(), Colors.redAccent);
-                        }
-                      },
-                      child: const CardHome(
-                          image: "assets/icons/honorarios.png",
-                          text: "Vistoria"),
-                    ),
+                    //       ReusableSnackbar.showSnackbar(
+                    //           context, e.toString(), Colors.redAccent);
+                    //     }
+                    //   },
+                    //   child: const CardHome(
+                    //       image: "assets/icons/honorarios.png",
+                    //       text: "Vistoria"),
+                    // ),
                   ],
                 ),
               ),

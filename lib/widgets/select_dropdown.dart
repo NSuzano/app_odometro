@@ -1,4 +1,3 @@
-import 'package:app_odometro/models/categories.dart';
 import 'package:flutter/material.dart';
 
 class SelectDrop extends StatefulWidget {

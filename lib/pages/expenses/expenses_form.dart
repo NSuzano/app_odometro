@@ -6,7 +6,6 @@ import 'package:app_odometro/models/payment.dart';
 import 'package:app_odometro/pages/expenses/util/util_expenses.dart';
 import 'package:app_odometro/util/geolocator_util.dart';
 import 'package:app_odometro/util/loading_dialog.dart';
-import 'package:app_odometro/util/providers/car_provider.dart';
 import 'package:app_odometro/util/providers/expenses_provider.dart';
 import 'package:app_odometro/util/snackbar.dart';
 import 'package:app_odometro/widgets/select_dropdown.dart';
