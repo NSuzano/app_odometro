@@ -154,6 +154,18 @@ class _RaceFormState extends State<RaceForm> {
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide.none,
             ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(
+                  color: Colors.grey.shade300,
+                  width: 1.5), // Borda quando o campo está não focado
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                  color: kDefaultColors,
+                  width: 2), // Borda quando o campo está focado
+            ),
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {

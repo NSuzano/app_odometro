@@ -68,7 +68,7 @@ class _HomeState extends State<Home> {
           ),
           backgroundColor: kDefaultColors,
           leading: Padding(
-            padding: const EdgeInsets.all(7.0),
+            padding: const EdgeInsets.all(9.0),
             child: SizedBox(
               child: Image.asset(
                 "assets/icons/icon_wp.png",
@@ -182,7 +182,7 @@ class _HomeState extends State<Home> {
                       },
                       child: const CardHome(
                           image: "assets/icons/odometro.png",
-                          text: "Registro de Corrida"),
+                          text: "Registro de Corridas"),
                     ),
                     GestureDetector(
                       onTap: () async {
