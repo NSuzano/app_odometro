@@ -78,9 +78,10 @@ class _ListRaceState extends State<ListRace> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              const Text(
-                "Todos os Registros",
-                style: TextStyle(
+              Text(
+                "Todos os Registros de corrida do ${user.name}",
+                textAlign: TextAlign.center,
+                style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: kDefaultColors,
                     fontSize: 20),
@@ -105,7 +106,6 @@ class _ListRaceState extends State<ListRace> {
                             if (index < raceProvider.races.length) {
                               race = races[index];
 
-                              print(index);
                               return RaceCard(
                                 race: race,
                               );
@@ -143,6 +143,8 @@ class _ListRaceState extends State<ListRace> {
               listCategories =
                   await CategoriesUtil.getCategories(user, "route");
 
+              if (!context.mounted) return;
+
               Navigator.pushNamed(context, 'race', arguments: {
                 "user": user,
                 "driver": driver,
@@ -154,6 +156,8 @@ class _ListRaceState extends State<ListRace> {
               //   "categories-list": listCategories
               // });
             } catch (e) {
+              if (!context.mounted) return;
+
               ReusableSnackbar.showSnackbar(context, "$e", Colors.red);
             }
           },

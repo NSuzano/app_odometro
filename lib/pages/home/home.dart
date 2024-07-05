@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:app_odometro/models/driver.dart';
 import 'package:app_odometro/models/payment.dart';
 import 'package:app_odometro/util/card_home.dart';
@@ -166,21 +168,29 @@ class _HomeState extends State<Home> {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        raceProvider.clearRaces();
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return const LoadingDialog();
-                          },
-                        );
-                        Driver driverInfo =
-                            await DriversInfoUtil.getDriver(user);
-                        await raceProvider.fetchRaces(user, 1);
-                        Navigator.pop(context);
-                        Navigator.pushNamed(context, 'list-race',
-                            arguments: {"user": user, "driver": driverInfo});
-                        // Get.toNamed('list-race',
-                        //     arguments: {"user": user, "driver": driverInfo});
+                        try {
+                          raceProvider.clearRaces();
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return const LoadingDialog();
+                            },
+                          );
+
+                          Driver driverInfo =
+                              await DriversInfoUtil.getDriver(user);
+                          await raceProvider.fetchRaces(user, 1);
+
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, 'list-race',
+                              arguments: {"user": user, "driver": driverInfo});
+                          // Get.toNamed('list-race',
+                          //     arguments: {"user": user, "driver": driverInfo});
+                        } catch (e) {
+                          Navigator.pop(context);
+                          ReusableSnackbar.showSnackbar(
+                              context, "$e", Colors.red);
+                        }
                       },
                       child: const CardHome(
                           image: "assets/icons/odometro.png",
@@ -286,8 +296,6 @@ class _HomeState extends State<Home> {
         backgroundColor: kDefaultColors,
         onPressed: () async {
           _areButtonsVisible = false;
-          // Implementar o que cada botão deve fazer
-          print("$title pressed");
 
           if (title == "Cadastrar Carro") {
             showDialog(

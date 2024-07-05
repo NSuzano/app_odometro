@@ -7,8 +7,10 @@ import '../../models/user.dart';
 import '../../util/loading_dialog.dart';
 
 class Login extends StatefulWidget {
+  const Login({super.key});
+
   @override
-  _LoginState createState() => _LoginState();
+  State<Login> createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
@@ -29,7 +31,7 @@ class _LoginState extends State<Login> {
               key: _formKey,
               child: Column(
                 children: [
-                  Container(
+                  SizedBox(
                       width: 150,
                       child: Image.asset(
                         "assets/icons/icon_wp.png",
@@ -117,12 +119,17 @@ class _LoginState extends State<Login> {
                         try {
                           user = await User.login(email, password, context);
 
-                          Navigator.pop(context);
+                          if (context.mounted) {
+                            Navigator.pop(context);
+                          }
+
                           Get.offAndToNamed('home');
                         } catch (e) {
-                          ReusableSnackbar.showSnackbar(
-                              context, "$e", Colors.redAccent);
-                          Navigator.pop(context);
+                          if (context.mounted) {
+                            ReusableSnackbar.showSnackbar(
+                                context, "$e", Colors.redAccent);
+                            Navigator.pop(context);
+                          }
                         }
                       }
                     },

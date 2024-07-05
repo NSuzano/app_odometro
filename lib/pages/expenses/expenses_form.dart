@@ -11,7 +11,6 @@ import 'package:app_odometro/util/providers/expenses_provider.dart';
 import 'package:app_odometro/widgets/select_dropdown.dart';
 import 'package:app_odometro/widgets/text_form_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/models/quickalert_type.dart';
@@ -283,25 +282,19 @@ class _ExpansesFormsState extends State<ExpansesForms> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           if (_selectedOptionPayment == null) {
-                            print("Não selecionado pagamento");
                             setState(() {
                               _isPaymentDropdownError = true;
                             });
                           } else if (_selectedOption == null) {
-                            print("Não selecionado Categoria");
-
                             setState(() {
                               _isFirstDropdownError = true;
                             });
                           } else if (_selectedGasOption == null &&
                               _selectedOption == "1") {
-                            print("Não selecionado Combustivel");
-
                             setState(() {
                               _isSecondDropdownError = true;
                             });
                           } else if (_capturedImage == null) {
-                            print("Sem imagem");
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text(
@@ -311,7 +304,6 @@ class _ExpansesFormsState extends State<ExpansesForms> {
                               ),
                             );
                           } else {
-                            print("OK");
                             _sendItems(expenseProvider);
                           }
                         }
@@ -366,7 +358,6 @@ class _ExpansesFormsState extends State<ExpansesForms> {
   }
 
   Future<void> _sendItems(ExpenseProvider expenseProvider) async {
-    print("TESTE");
     showDialog(
       context: context,
       builder: (context) => const LoadingDialog(),
@@ -395,8 +386,6 @@ class _ExpansesFormsState extends State<ExpansesForms> {
         ? jsonSend["category_id"] = _selectedGasOption
         : null;
 
-    print("Json Send: $jsonSend");
-
     try {
       String idResponse = await ExpensesUtil.postExpenses(jsonSend, user);
 
@@ -405,7 +394,10 @@ class _ExpansesFormsState extends State<ExpansesForms> {
 
       expenseProvider.clearExpenses();
       await expenseProvider.fetchExpenses(user, 1);
+      if (!context.mounted) return;
+
       Navigator.pop(context); // Close the loading dialog
+
       Navigator.popUntil(context, (route) {
         if (route.settings.name == 'expensives_list') {
           return true;
@@ -422,6 +414,8 @@ class _ExpansesFormsState extends State<ExpansesForms> {
         confirmBtnColor: kDefaultColors,
       );
     } catch (e) {
+      if (!context.mounted) return;
+
       Navigator.pop(context); // Close the loading dialog
 
       QuickAlert.show(

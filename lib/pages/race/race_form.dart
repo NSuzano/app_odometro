@@ -6,7 +6,6 @@ import 'package:app_odometro/models/driver.dart';
 import 'package:app_odometro/pages/race/race_card.dart';
 import 'package:app_odometro/util/providers/races_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -37,12 +36,6 @@ class _RaceFormState extends State<RaceForm> {
   List<Categories> categoriesList = [];
   late Driver driver;
   String? _selectedOption;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -321,6 +314,8 @@ class _RaceFormState extends State<RaceForm> {
 
           controller.clear();
           _capturedImage = null;
+          if (!context.mounted) return;
+
           Navigator.pop(context); // Close the loading dialog
 
           // ReusableSnackbar.showSnackbar(context, response, Colors.green);
@@ -330,6 +325,7 @@ class _RaceFormState extends State<RaceForm> {
 
           await raceProvider.fetchRaces(user, 1);
 
+          if (!context.mounted) return;
           Navigator.popUntil(context, (route) {
             if (route.settings.name == 'list-race') {
               return true;
@@ -346,6 +342,8 @@ class _RaceFormState extends State<RaceForm> {
             confirmBtnColor: kDefaultColors,
           );
         } catch (e) {
+          if (!context.mounted) return;
+
           Navigator.pop(context); // Close the loading dialog
 
           QuickAlert.show(
@@ -404,7 +402,6 @@ class _RaceFormState extends State<RaceForm> {
       if (response.statusCode == 201) {
         return jsonResponse['message'];
       } else {
-        print(jsonResponse['errors'][0]);
         throw jsonResponse['errors'][0];
       }
     } catch (e) {

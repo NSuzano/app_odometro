@@ -132,8 +132,6 @@ class _ExpensesPageState extends State<ExpensesPage> {
                             Expenses? expense;
                             expense = expenses[index];
 
-                            print(index);
-
                             return ExpensesCard(
                               expenses: expense,
                             );
@@ -164,13 +162,15 @@ class _ExpensesPageState extends State<ExpensesPage> {
                     // listCategoriesGroupTax =
                     //     await CategoriesUtil.getCategories(user, "group_taxa");
 
-                    Navigator.pushNamed(context, 'expensives', arguments: {
-                      "user": user,
-                      "categories-list": listCategories,
-                      "categories-gas": listCategoriesGas,
-                      "driver": driver,
-                      "payment-list": paymentList
-                    });
+                    if (context.mounted) {
+                      Navigator.pushNamed(context, 'expensives', arguments: {
+                        "user": user,
+                        "categories-list": listCategories,
+                        "categories-gas": listCategoriesGas,
+                        "driver": driver,
+                        "payment-list": paymentList
+                      });
+                    }
 
                     // Get.toNamed('expensives', arguments: {
                     //   "user": user,
@@ -180,6 +180,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                     //   "payment-list": paymentList
                     // });
                   } catch (e) {
+                    if (!context.mounted) return;
                     ReusableSnackbar.showSnackbar(context, "$e", Colors.red);
                   }
                 },

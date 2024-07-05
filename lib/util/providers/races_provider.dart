@@ -12,17 +12,14 @@ class RaceProvider with ChangeNotifier {
   bool get hasMore => _hasMore;
   int get currentPage => _currentPage;
 
-  Future fetchRaces(User user, int _currentPage) async {
+  Future fetchRaces(User user, int page) async {
     List<Race> listRaces = await RaceUtils.getRaces(user, _currentPage);
     if (listRaces.length < 10) {
       _hasMore = false;
     }
     _races.addAll(listRaces);
 
-    print("RACES: $races -  Length - ${races.length}");
     _currentPage++;
-
-    print("HAS MORE : $_hasMore");
 
     notifyListeners();
   }
