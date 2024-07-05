@@ -177,8 +177,10 @@ class _HomeState extends State<Home> {
                             await DriversInfoUtil.getDriver(user);
                         await raceProvider.fetchRaces(user, 1);
                         Navigator.pop(context);
-                        Get.toNamed('list-race',
+                        Navigator.pushNamed(context, 'list-race',
                             arguments: {"user": user, "driver": driverInfo});
+                        // Get.toNamed('list-race',
+                        //     arguments: {"user": user, "driver": driverInfo});
                       },
                       child: const CardHome(
                           image: "assets/icons/odometro.png",
@@ -202,11 +204,18 @@ class _HomeState extends State<Home> {
 
                           await expenseProvider.fetchExpenses(user, 1);
                           Navigator.pop(context);
-                          Get.toNamed('expensives_list', arguments: {
-                            "user": user,
-                            "driver": driverInfo,
-                            "payment-list": payment
-                          });
+                          Navigator.pushNamed(context, 'expensives_list',
+                              arguments: {
+                                "user": user,
+                                "driver": driverInfo,
+                                "payment-list": payment
+                              });
+
+                          // Get.toNamed('expensives_list', arguments: {
+                          //   "user": user,
+                          //   "driver": driverInfo,
+                          //   "payment-list": payment
+                          // });
                         } catch (e) {
                           Navigator.pop(context); // Close the loading dialog
 

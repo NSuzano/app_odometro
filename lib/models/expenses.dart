@@ -55,16 +55,16 @@ class Expenses {
   Expenses.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     type = json['type'] ?? "";
-    externalCode = json['external_code'] ?? "";
-    transactionCode = json['transaction_code'] ?? "";
-    description = json['description'] ?? "";
-    grossAmount = json['gross_amount'] ?? "";
-    netAmount = json['net_amount'] ?? "";
-    status = json['status'] ?? "";
-    dueDate = json['due_date'] ?? "";
-    paymentDate = json['payment_date'] ?? "";
-    cancellationDate = json['cancellation_date'] ?? "";
-    clearanceDate = json['clearance_date'] ?? "";
+    externalCode = json['external_code'] ?? "-";
+    transactionCode = json['transaction_code'] ?? "-";
+    description = json['description'] ?? "-";
+    grossAmount = json['gross_amount'] ?? "-";
+    netAmount = json['net_amount'] ?? "-";
+    status = json['status'] ?? "-";
+    dueDate = json['due_date'] ?? "-";
+    paymentDate = json['payment_date'] ?? "-";
+    cancellationDate = json['cancellation_date'] ?? "-";
+    clearanceDate = json['clearance_date'] ?? "-";
     branchId = json['branch_id'];
     groupTaxaId = json['group_taxa_id'];
     categoryId = json['category_id'];

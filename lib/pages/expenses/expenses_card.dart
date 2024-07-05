@@ -62,7 +62,9 @@ class ExpensesCard extends StatelessWidget {
                   ),
                 ),
                 AutoSizeText(
-                  "Pagamento: ${expenses.payment!.name}",
+                  expenses.payment == null
+                      ? "Pagamento: -"
+                      : "Pagamento: ${expenses.payment!.name}",
                   style: const TextStyle(
                     fontSize: 12.0,
                     fontWeight: FontWeight.bold,
@@ -73,7 +75,7 @@ class ExpensesCard extends StatelessWidget {
                 ),
                 Text(
                   data,
-                  style: const TextStyle(fontSize: 12),
+                  style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                 )
               ],
             ),

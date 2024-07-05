@@ -4,17 +4,18 @@ import 'package:app_odometro/models/categories.dart';
 import 'package:app_odometro/models/driver.dart';
 import 'package:app_odometro/models/payment.dart';
 import 'package:app_odometro/pages/expenses/util/util_expenses.dart';
+import 'package:app_odometro/util/formats/currency_input_formatter.dart';
 import 'package:app_odometro/util/geolocator_util.dart';
 import 'package:app_odometro/util/loading_dialog.dart';
 import 'package:app_odometro/util/providers/expenses_provider.dart';
-import 'package:app_odometro/util/snackbar.dart';
 import 'package:app_odometro/widgets/select_dropdown.dart';
 import 'package:app_odometro/widgets/text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 import '../../constraint/constraint.dart';
 import '../../models/user.dart';
@@ -50,8 +51,6 @@ class _ExpansesFormsState extends State<ExpansesForms> {
   bool _isPaymentDropdownError = false;
   bool _isSelectedGas = false;
 
-  final data = Get.arguments;
-
   void _onImageUploadPressed() {
     pickImage(source: ImageSource.camera).then((value) {
       if (value != '') {
@@ -64,11 +63,14 @@ class _ExpansesFormsState extends State<ExpansesForms> {
 
   @override
   Widget build(BuildContext context) {
-    user = data['user'];
-    categoriesList = data['categories-list'];
-    categoriesListGas = data['categories-gas'];
-    driver = data['driver'];
-    paymentList = data['payment-list'];
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+
+    user = args['user'];
+    categoriesList = args['categories-list'];
+    categoriesListGas = args['categories-gas'];
+    driver = args['driver'];
+    paymentList = args['payment-list'];
+
     final expenseProvider = Provider.of<ExpenseProvider>(context);
 
     TextStyle style =
@@ -137,10 +139,7 @@ class _ExpansesFormsState extends State<ExpansesForms> {
                       icon: Icons.monetization_on,
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: true),
-                      format: [
-                        FilteringTextInputFormatter.allow(
-                            RegExp(r'^\d+\.?\d{0,2}')),
-                      ],
+                      format: [CurrencyInputFormatter()],
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Por favor, digite o valor da nota';
@@ -401,18 +400,40 @@ class _ExpansesFormsState extends State<ExpansesForms> {
     try {
       String idResponse = await ExpensesUtil.postExpenses(jsonSend, user);
 
-      String response = await ExpensesUtil.postImageExpenses(user, _capturedImage!, idResponse);
+      String response = await ExpensesUtil.postImageExpenses(
+          user, _capturedImage!, idResponse);
 
-      ReusableSnackbar.showSnackbar(context, response, Colors.green);
       expenseProvider.clearExpenses();
       await expenseProvider.fetchExpenses(user, 1);
       Navigator.pop(context); // Close the loading dialog
-      Navigator.pop(context); // Close the page
+      Navigator.popUntil(context, (route) {
+        if (route.settings.name == 'expensives_list') {
+          return true;
+        }
+        return false;
+      });
+
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.success,
+        title: 'Sucesso',
+        text: response,
+        confirmBtnText: "Fechar",
+        confirmBtnColor: kDefaultColors,
+      );
     } catch (e) {
       Navigator.pop(context); // Close the loading dialog
 
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('$e'), backgroundColor: Colors.red));
+      QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          title: 'Erro',
+          text: e.toString(),
+          confirmBtnText: "Fechar",
+          confirmBtnColor: kDefaultColors);
+
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(content: Text('$e'), backgroundColor: Colors.red));
     }
   }
 }

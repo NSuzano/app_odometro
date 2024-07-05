@@ -5,11 +5,11 @@ import 'package:app_odometro/models/race.dart';
 import 'package:app_odometro/models/user.dart';
 import 'package:app_odometro/pages/race/race_card.dart';
 import 'package:app_odometro/util/providers/races_provider.dart';
+import 'package:app_odometro/util/providers/user_provider.dart';
 import 'package:app_odometro/util/snackbar.dart';
 import 'package:app_odometro/util/util_categories.dart';
 import 'package:app_odometro/widgets/label_races.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class ListRace extends StatefulWidget {
@@ -31,6 +31,8 @@ class _ListRaceState extends State<ListRace> {
 
     _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
+
+    user = Provider.of<UserProvider>(context, listen: false).user;
   }
 
   void _onScroll() {
@@ -46,10 +48,12 @@ class _ListRaceState extends State<ListRace> {
   @override
   Widget build(BuildContext context) {
     final raceProvider = Provider.of<RaceProvider>(context);
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
 
-    final data = Get.arguments;
-    user = data['user'];
-    driver = data['driver'];
+    driver = args["driver"];
+
+    // final data = Get.arguments;
+    // driver = data['driver'];
     races = raceProvider.races;
 
     return Scaffold(
@@ -138,11 +142,17 @@ class _ListRaceState extends State<ListRace> {
             try {
               listCategories =
                   await CategoriesUtil.getCategories(user, "route");
-              Get.toNamed('race', arguments: {
+
+              Navigator.pushNamed(context, 'race', arguments: {
                 "user": user,
                 "driver": driver,
                 "categories-list": listCategories
               });
+              // Get.toNamed('race', arguments: {
+              //   "user": user,
+              //   "driver": driver,
+              //   "categories-list": listCategories
+              // });
             } catch (e) {
               ReusableSnackbar.showSnackbar(context, "$e", Colors.red);
             }

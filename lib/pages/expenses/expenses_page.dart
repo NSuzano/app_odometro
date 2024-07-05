@@ -10,7 +10,6 @@ import 'package:app_odometro/util/snackbar.dart';
 import 'package:app_odometro/util/util_categories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class ExpensesPage extends StatefulWidget {
@@ -25,7 +24,6 @@ class _ExpensesPageState extends State<ExpensesPage> {
   List<Expenses> expenses = [];
   late ScrollController _scrollController;
   bool _isButtonVisible = true;
-  final data = Get.arguments;
 
   late Driver driver;
   late List<Payment> paymentList;
@@ -77,10 +75,12 @@ class _ExpensesPageState extends State<ExpensesPage> {
   Widget build(BuildContext context) {
     final expenseProvider = Provider.of<ExpenseProvider>(context);
 
-    user = data['user'];
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+
+    user = args['user'];
     expenses = expenseProvider.expenses;
-    driver = data['driver'];
-    paymentList = data['payment-list'];
+    driver = args['driver'];
+    paymentList = args['payment-list'];
 
     return Scaffold(
         appBar: AppBar(
@@ -164,13 +164,21 @@ class _ExpensesPageState extends State<ExpensesPage> {
                     // listCategoriesGroupTax =
                     //     await CategoriesUtil.getCategories(user, "group_taxa");
 
-                    Get.toNamed('expensives', arguments: {
+                    Navigator.pushNamed(context, 'expensives', arguments: {
                       "user": user,
                       "categories-list": listCategories,
                       "categories-gas": listCategoriesGas,
                       "driver": driver,
                       "payment-list": paymentList
                     });
+
+                    // Get.toNamed('expensives', arguments: {
+                    //   "user": user,
+                    //   "categories-list": listCategories,
+                    //   "categories-gas": listCategoriesGas,
+                    //   "driver": driver,
+                    //   "payment-list": paymentList
+                    // });
                   } catch (e) {
                     ReusableSnackbar.showSnackbar(context, "$e", Colors.red);
                   }

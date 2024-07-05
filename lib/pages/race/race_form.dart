@@ -7,18 +7,18 @@ import 'package:app_odometro/pages/race/race_card.dart';
 import 'package:app_odometro/util/providers/races_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import '../../constraint/constraint.dart';
 import '../../models/race.dart';
 import '../../models/user.dart';
 import '../../util/geolocator_util.dart';
 import '../../util/image_picker_class.dart';
 import '../../util/loading_dialog.dart';
-import '../../util/snackbar.dart';
 
 class RaceForm extends StatefulWidget {
   const RaceForm({Key? key}) : super(key: key);
@@ -37,7 +37,6 @@ class _RaceFormState extends State<RaceForm> {
   List<Categories> categoriesList = [];
   late Driver driver;
   String? _selectedOption;
-  final data = Get.arguments;
 
   @override
   void initState() {
@@ -49,9 +48,11 @@ class _RaceFormState extends State<RaceForm> {
   Widget build(BuildContext context) {
     final raceProvider = Provider.of<RaceProvider>(context);
 
-    user = data['user'];
-    categoriesList = data['categories-list'];
-    driver = data['driver'];
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+
+    user = args['user'];
+    categoriesList = args['categories-list'];
+    driver = args['driver'];
 
     races = raceProvider.races;
     return Scaffold(
@@ -322,18 +323,41 @@ class _RaceFormState extends State<RaceForm> {
           _capturedImage = null;
           Navigator.pop(context); // Close the loading dialog
 
-          ReusableSnackbar.showSnackbar(context, response, Colors.green);
+          // ReusableSnackbar.showSnackbar(context, response, Colors.green);
           raceProvider.clearRaces();
-          // print(user.name);
-          // return;
+          // // print(user.name);
+          // // return;
 
           await raceProvider.fetchRaces(user, 1);
-          Navigator.pop(context); // Close the loading dialog
+
+          Navigator.popUntil(context, (route) {
+            if (route.settings.name == 'list-race') {
+              return true;
+            }
+            return false;
+          });
+
+          QuickAlert.show(
+            context: context,
+            type: QuickAlertType.success,
+            title: 'Sucesso',
+            text: response,
+            confirmBtnText: "Fechar",
+            confirmBtnColor: kDefaultColors,
+          );
         } catch (e) {
           Navigator.pop(context); // Close the loading dialog
 
-          ReusableSnackbar.showSnackbar(
-              context, e.toString(), Colors.redAccent);
+          QuickAlert.show(
+              context: context,
+              type: QuickAlertType.error,
+              title: 'Erro',
+              text: e.toString(),
+              confirmBtnText: "Fechar",
+              confirmBtnColor: kDefaultColors);
+
+          // ReusableSnackbar.showSnackbar(
+          //     context, e.toString(), Colors.redAccent);
         } finally {
           // Get.offAllNamed("home", arguments: {"user": user});
         }
@@ -343,19 +367,6 @@ class _RaceFormState extends State<RaceForm> {
 
   Future<String> postRace(String kilo, String lat, String long, String hora,
       String data, int userId, File? image) async {
-    // List<int> imageBytes = image!.readAsBytesSync();
-    // String base64Image = base64Encode(imageBytes);
-
-    // Map jsonPost = {
-    //   "odometer": kilo,
-    //   "latitude": lat,
-    //   "longitude": long,
-    //   "date": data,
-    //   "time": hora,
-    //   "user_id": userId.toString(),
-    //   // "voucher_file": base64Image
-    // };
-
     try {
       // Criar um request Multipart
       var request = http.MultipartRequest('POST', Uri.parse(kRacePost));
@@ -393,7 +404,8 @@ class _RaceFormState extends State<RaceForm> {
       if (response.statusCode == 201) {
         return jsonResponse['message'];
       } else {
-        throw jsonResponse['errors'];
+        print(jsonResponse['errors'][0]);
+        throw jsonResponse['errors'][0];
       }
     } catch (e) {
       return Future.error(e);
