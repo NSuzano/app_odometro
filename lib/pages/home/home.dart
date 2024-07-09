@@ -194,7 +194,7 @@ class _HomeState extends State<Home> {
                         }
                       },
                       child: const CardHome(
-                          image: "assets/icons/odometro.png",
+                          image: "assets/icons/car.png",
                           text: "Registro de Corridas"),
                     ),
                     GestureDetector(
@@ -235,7 +235,7 @@ class _HomeState extends State<Home> {
                         }
                       },
                       child: const CardHome(
-                          image: "assets/icons/honorarios.png",
+                          image: "assets/icons/parking-ticket.png",
                           text: "Dispesas"),
                     ),
                     GestureDetector(
@@ -261,7 +261,7 @@ class _HomeState extends State<Home> {
                         }
                       },
                       child: const CardHome(
-                          image: "assets/icons/honorarios.png",
+                          image: "assets/icons/insurance.png",
                           text: "Vistoria"),
                     ),
                   ],

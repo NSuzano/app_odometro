@@ -14,15 +14,15 @@ class CardHome extends StatelessWidget {
         children: [
           Image.asset(
             image,
-            height: 100,
-            width: 100,
+            height: 80,
+            width: 80,
             fit: BoxFit.cover,
           ),
           const SizedBox(height: 8.0),
           Text(
             text,
             style: const TextStyle(
-                fontSize: 15.0,
+                fontSize: 14.0,
                 fontWeight: FontWeight.bold,
                 color: kDefaultColors),
           ),
