@@ -21,6 +21,25 @@ class _SurveyPageState extends State<SurveyPage> {
   List<Survey> surveys = [];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      final raceProvider = Provider.of<SurveyProvider>(context, listen: false);
+      if (raceProvider.hasMore) {
+        raceProvider.fetchSurvey(user, raceProvider.currentPage);
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final surveyProvider = Provider.of<SurveyProvider>(context);
 

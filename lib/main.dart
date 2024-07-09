@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:app_odometro/constraint/constraint.dart';
+import 'package:app_odometro/models/survey.dart';
 import 'package:app_odometro/models/user.dart';
 import 'package:app_odometro/pages/car/car_form.dart';
 import 'package:app_odometro/pages/car/car_page.dart';
@@ -10,6 +11,7 @@ import 'package:app_odometro/pages/expenses/expenses_page.dart';
 import 'package:app_odometro/pages/race/list_race.dart';
 import 'package:app_odometro/pages/login/login.dart';
 import 'package:app_odometro/pages/race/race_form.dart';
+import 'package:app_odometro/pages/survey/survey_details.dart';
 import 'package:app_odometro/pages/survey/survey_page.dart';
 import 'package:app_odometro/util/providers/car_provider.dart';
 import 'package:app_odometro/util/providers/expenses_provider.dart';
@@ -64,6 +66,7 @@ class MyApp extends StatelessWidget {
         'driver-page': (context) => const DriverPage(),
         'car-page': (context) => const CarPage(),
         'car-form': (context) => const CarForm(),
+        
       },
     );
   }
